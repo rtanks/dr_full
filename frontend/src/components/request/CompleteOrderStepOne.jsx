@@ -91,14 +91,14 @@ export default function CompleteOrderStepOne({selectStep}) {
                         </div>
                     </div>
 
-                    <div className='w-full h-max flex flex-col sm:flex-row gap-2 sm:gap-2 items-start'>
-                        <div className='w-1/2 h-max'>
+                    <div className='w-full h-max flex flex-col sm:flex-row gap-2 sm:gap-2'>
+                        <div className='w-full sm:w-1/2 h-max'>
                             <InputWithLabel type={'text'} label={'شماره تلفن'} 
                                 placeholder={"مثال : 1234567890"} register={register('phoneNumber')} 
                                 hasError={errors.phoneNumber} isValid={watch('phoneNumber') ? getFieldStateValue('phoneNumber') : false}/>
                             {errors.phoneNumber && <TextError message={errors.phoneNumber.message}/>}
                         </div>
-                        <div className='w-1/2 h-max flex flex-col items-start justify-end gap-0'>
+                        <div className='w-full sm:w-1/2 h-max flex flex-col items-start justify-end gap-0'>
                             {
                                 enterCode ? (
                                     <div className={`w-full h-max flex flex-col gap-1 pt-[9%]`}>
