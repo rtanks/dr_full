@@ -101,12 +101,12 @@ export default function CompleteOrderStepOne({selectStep}) {
                         <div className='w-full sm:w-1/2 h-max flex flex-col items-start justify-end gap-0'>
                             {
                                 enterCode ? (
-                                    <div className={`w-full h-max flex flex-col gap-1 pt-[9%]`}>
+                                    <div className={`w-full h-max flex flex-col gap-1 sm:pt-[9%]`}>
                                         <EnterCode register={register('otp')} isValid={watch('otp') ? getFieldStateValue('otp') : false}/>
                                         {errors.otp  && <TextError message={errors.otp.message}/>}
                                     </div>
                                 ) : (
-                                    <div className='w-full h-max flex flex-row gap-2 pt-[9%]'>
+                                    <div className='w-full h-max flex flex-row gap-2 sm:pt-[9%]'>
                                         <Button type={'button'}  onClick={() => handlerClick()} text={'دریافت پیامک'} 
                                         disable={errors.phoneNumber? true : (watch('phoneNumber')? false : true)}/>
                                         <Button onClick={() => setEnterCode(true)} type={'button'} text={'ورود کد'} disable={false}/>
