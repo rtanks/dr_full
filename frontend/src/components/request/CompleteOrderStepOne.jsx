@@ -91,7 +91,7 @@ export default function CompleteOrderStepOne({selectStep}) {
                         </div>
                     </div>
 
-                    <div className='w-full h-max flex flex-row gap-2 sm:gap-2 items-start'>
+                    <div className='w-full h-max flex flex-col sm:flex-row gap-2 sm:gap-2 items-start'>
                         <div className='w-1/2 h-max'>
                             <InputWithLabel type={'text'} label={'شماره تلفن'} 
                                 placeholder={"مثال : 1234567890"} register={register('phoneNumber')} 
