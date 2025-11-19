@@ -30,7 +30,7 @@ export default function Register({changeItemShow}) {
     
     const onSubmit = (data) => {
         console.log(data);
-        registerMutation.mutate(data);
+        // registerMutation.mutate(data);
     }
     return (
         <>
