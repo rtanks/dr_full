@@ -1,4 +1,4 @@
-import HistoryItem from "./historyItem";
+import HistoryItem from "./HistoryItem";
 
 export default function HistoryDoctor () {
     return (
