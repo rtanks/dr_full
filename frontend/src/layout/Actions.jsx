@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
-import HistoryItem from "../components/history/historyItem";
-import historyService from "../services/api/historyService";
-import { useQuery } from '@tanstack/react-query';
+import { useState } from "react";
 import {IoAlertCircleOutline, IoNotificationsOutline, IoSettingsOutline} from 'react-icons/io5'
-import {LiaAngleDownSolid, LiaCircleSolid} from 'react-icons/lia'
-import { HiArrowLeftStartOnRectangle} from 'react-icons/hi2'
+import {LiaAngleDownSolid } from 'react-icons/lia'
 import HistoryTitle from "../components/history/HistoryTitle";
 import HistoryDoctor from "../components/history/HistoryDoctor";
 import HistoryParaClinic from "../components/history/HistoryParaClinic";
