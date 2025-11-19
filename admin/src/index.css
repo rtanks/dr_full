@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@font-face {
+    font-family: 'IranSansMedium';
+    src: url('./assets/fonts/Iran\ Sans.ttf')format('truetype');
+    font-weight: '';
+}
+@font-face {
+    font-family: 'IranSansBold';
+    src: url('./assets/fonts/Vazirmatn-Medium.ttf')format('truetype');
+    font-weight: bold;
+}
+.vazir-light{
+    font-family: IranSansMedium;
+}
+.vazir-medium{
+    font-family: IranSansBold;
+}
+#root {
+    @apply w-full sm:w-[402px] mx-auto;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+
+button:hover, Link:hover, NavLink:hover, a:hover {
+    @apply cursor-pointer;
+}

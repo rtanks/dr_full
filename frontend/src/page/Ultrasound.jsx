@@ -1,0 +1,7 @@
+export default function Ultrasound() {
+    return (
+        <div className="w-full h-full bg-white rounded-2xl">
+            Ultrasound
+        </div>
+    )
+}
