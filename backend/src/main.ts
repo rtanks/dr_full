@@ -2,16 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 
 async function bootstrap() {
   dotenv.config()
 
-//  const httpsOptions = {
-//     key: fs.readFileSync('/path/to/privkey.pem'),
-//     cert: fs.readFileSync('/path/to/fullchain.pem'),
-//   };
+ const httpsOptions = {
+    key: fs.readFileSync('/path/to/privkey.pem'),
+    cert: fs.readFileSync('/path/to/fullchain.pem'),
+  };
   const app = await NestFactory.create(AppModule, {
-    // httpsOptions,
+    httpsOptions,
   });
   // const port = 443
   // await app.listen(port);
@@ -19,8 +20,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({whitelist: true, transform: true}))
 
   app.enableCors({
-    origin: true
-    // origin: 'http://localhost:5173',
+    origin: true,
     // credential: true
   })
 
