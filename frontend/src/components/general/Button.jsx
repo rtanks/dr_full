@@ -2,8 +2,8 @@ import classNames from "classnames";
 
 const Button = ({type, text, textSubmitting, isSubmitting, disable, onClick})=>{
     const disabledClass = classNames({
-        "text-white bg-blue-500": !disable,
-        "text-gray-500 bg-gray-200":disable
+        "text-white bg-select": !disable,
+        "text-disable bg-disable-container":disable
     })
     return(
         <button type={type} onSubmit={() => console.log('hello')}  onClick={onClick}

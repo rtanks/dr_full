@@ -8,6 +8,22 @@ import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
 export class RequestsController {
   constructor(private readonly requestsService: RequestsService) {}
 
+  //draft
+  @Post('create-draft')
+  async saveRequestDraft(@Body() body:{tempId:string, data:object}) {
+    await this.requestsService.saveRequestDraft(body.tempId, body.data);
+    return {message: 'draft saved!'};
+  }
+  @Post('delete-draft')
+  async deleteDraft(@Body('userKey') userKey:string ) {
+    return this.requestsService.deleteDraft(userKey);
+  }
+  @Get('get-draft/:userKey')
+  async getDraft(@Param('userKey') userKey:string) {
+    return await this.requestsService.getDraft(userKey)
+  }
+  // f1662973-e3d5-4a35-a568-b65c71c0b567
+  //requests
   @Post('create')
   async createOtherRequest(@Body() createRequestDto: CreateRequestDto) {
     return await this.requestsService.createOtherRequest(createRequestDto);

@@ -14,6 +14,10 @@ import MRI from './page/MRI'
 import Physiotherapy from './page/Physiotherapy'
 import Graph from './page/Graph'
 import CtScan from './page/CtScan'
+import QrCode from './page/QrCode'
+
+import Success from './page/payment/Success'
+import Failed from './page/payment/Failed'
 
 export default function RoutesList() {
     return (
@@ -31,12 +35,15 @@ export default function RoutesList() {
                     <Route path='test' element={<Test/>}/>
                     <Route path='physiotherapy' element={<Physiotherapy/>}/>
                     <Route path='transport' element={<Transport/>}/>
+                    <Route path='qrcode' element={<QrCode/>}/>
                 </Route>
+                <Route path='/payment/success' element={<Success/>}/>
+                <Route path='/payment/failed' element={<Failed/>}/>
                 {/* reagent */}
-                <Route element={<Reagent/>}>
+                {/* <Route element={<Reagent/>}>
                     <Route path='reagent/qrcode' element={<ReagentQrcode/>}/>
                     <Route path='/reagent/login' element={<LoginReagent/>}/>
-                </Route>
+                </Route> */}
             </Routes>
         </BrowserRouter>
     )

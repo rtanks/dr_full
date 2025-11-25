@@ -27,21 +27,18 @@ export const RequestSlice = createSlice({
     reducers: {
         getServiceAndTitle: (state, action) => {
             state.service = action.payload.service;
-            localStorage.setItem('order', JSON.stringify(state))
+            // localStorage.setItem('order', JSON.stringify(state))
         },
         getInfo: (state, action) => {
             state.fullName = action.payload.fullName;
             state.nationalCode = action.payload.nationalCode;
             state.phoneNumber = action.payload.phoneNumber;
-            localStorage.setItem('order', JSON.stringify(state))
         },
         getInfoStep2: (state, action) => {
             state.step2 = action.payload;
-            localStorage.setItem('order', JSON.stringify(state))
         },
         completeOrder: (state) => {
             state = initialState;
-            localStorage.removeItem('order')
         }
     }
 }) 

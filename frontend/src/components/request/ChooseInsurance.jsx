@@ -19,8 +19,8 @@ export default function ChooseInsurance({getInsurance}) {
             <div className='w-full mx-auto flex gap-1 items-stretch justify-start relative'>
                 {insuranceSelector.map((insurance) => (
                         <div onClick={() => {setActive(insurance.insuranceKey);getInsurance(insurance.insuranceName)}}
-                        className={`text-[12.5px] sm:text-sm text-898989 hover:cursor-pointer rounded-lg px-4 py-2 flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis  
-                        ${active === insurance.insuranceKey ? 'bg-blue-200 text-blue-700' : 'bg-gray-200'}`}
+                        className={`text-[12.5px] sm:text-sm font-bold text-unselect hover:cursor-pointer border rounded-lg px-4 py-2 flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis  
+                        ${active === insurance.insuranceKey ? 'bg-select-container text-select border-select' : 'bg-[#f7f7f7] border-a7a7a7'}`}
                         key={insurance.insuranceKey}
                     >
                         {insurance.insuranceName}

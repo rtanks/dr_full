@@ -9,17 +9,14 @@ export class User {
     @Prop()
     nationalCode: string;
 
-    @Prop({default: ''})
+    @Prop()
     phoneNumber: string;
 
     @Prop({default: ''})
-    province: string;
+    province?: string;
 
     @Prop({default: ''})
-    city: string;
-
-    @Prop({default: ''})
-    insurance: string;
+    city?: string;
 }
 export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -4,14 +4,12 @@
     display: none;
 }
 @font-face {
-    font-family: vazir;
+    font-family: iranSans;
     src: url('./assets/font/Vazirmatn-Light.ttf') format('truetype');
 }
-.vazir-light {
-    font-family: vazir;
-}
+
 * {
-    font-family: vazir;
+    font-family: iranSans;
     direction: rtl;
 }
 button:hover {
@@ -28,8 +26,14 @@ button:hover {
     --color-676767: #676767;
     --color-757575: #757575;
     --color-blue-main: #006ECF;
+    --color-select-container: #e8f5e9;
+    --color-select: #2e7d32;
+    --color-unselect: #555;
+    --color-unselect-container: #f0f0f0;
+    --color-disable-container: #e0e0e0;
+    --color-disable: #757575;
 }
-
+/* --------------------------------------------------------------------- */
 .tooltip {
     width: 100%;
     height: max;

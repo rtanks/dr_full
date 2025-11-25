@@ -14,16 +14,6 @@ export default function Actions() {
     const showHistoryItems = () => {
       return selectHistoryItem == 'doctor'? <HistoryDoctor/> : <HistoryParaClinic/>; 
     }
-    // const {getRequestsHistory} = historyService()
-
-    // const {data, isLoading, isPending} = useQuery({queryKey: ['requests'], queryFn: getRequestsHistory});
-
-    // useEffect(() => {
-    //     if(!isPending) {
-    //         console.log(data)
-    //     }
-    // },[data])
-    // if(isLoading) return <p>isLoading...</p>
     return (
         <section id="snap3" className='sm:w-[23%] w-[98%] h-full shrink-0 bg-transparent snap-end flex flex-col gap-4 sm:pt-2'>
             <div className="w-full h-[7%] hidden sm:flex flex-col">

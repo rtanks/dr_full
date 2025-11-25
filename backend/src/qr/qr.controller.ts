@@ -7,9 +7,9 @@ export class QrController {
   constructor(private readonly qrService: QrService) {}
 
   @Get()
-  async generate(@Query('code') code: string, @Res() res:Response) {
-        if (!code) return res.status(400).send('لطفاً پارامتر text را وارد کنید.');
-        const text = `${process.env.FRONTEND_URL}/search?q=${code}`;
+  async generate(@Query('nationalCode') nationalCode: string, @Res() res:Response) {
+        if (!nationalCode) return res.status(400).send('لطفاً پارامتر text را وارد کنید.');
+        const text = `${process.env.FRONTEND_URL}/search?q=${nationalCode}`;
 
         const dataUrl = await this.qrService.toDataUrl(text);
         const base64 = dataUrl.split(',')[1];

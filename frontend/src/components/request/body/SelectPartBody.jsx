@@ -8,11 +8,10 @@ import BodyBack from "./BodyBack";
 import SelectAreaContainer from "./SelectAreaContainer";
 import ItemsAreaSelected from "./ItemsAreaSelected";
 
-export default function SelectPartBody() {
+export default function SelectPartBody({getAreas}) {
     const [selectSide, setSelectSide] = useState('front');
-    const [activeItem, setActiveItem] = useState('');
+    const [activeItems, setActiveItems] = useState([]);
     const [itemsArea, setItemsArea] = useState([]);
-    const [itemsSelected, setItemsSelected] = useState([])
 
     const getSide = (side) => {
         setSelectSide(side);
@@ -20,19 +19,44 @@ export default function SelectPartBody() {
     const getItemsArea = (value) => {
         setItemsArea(value);
     }
-    const getActiveItem = (value) => {
-        setActiveItem(value);
-        setItemsSelected(prev => [...prev, value]);
+   const getActiveItems = (value) => {
+    if(activeItems.length == 0) {
+        setActiveItems([value]);
+    } else {
+        if(!activeItems.find(item => item == value)) {
+            setActiveItems(prev => [...prev, value]);
+        }
     }
-    const deleteItemSelected = (itemD) => {
-        const newArray = itemsSelected.filter(item => item != itemD);
-        setItemsSelected(newArray)
+   }
+   const itemActiveFind = (value) => {
+    if(activeItems.length == 0) {
+       return false;
+    } else {
+        if(activeItems.find(item => item == value)) {
+            return true;
+        }else {
+            return false;
+        }
     }
+   }
+   const deleteItem = (value) => {
+    if(activeItems.length != 0) {
+       const newArray = activeItems.filter(item => item != value);
+       setActiveItems(newArray)
+    } 
+   }
+   const deleteItemSelected = (value) => {
+    if(activeItems.length != 0) {
+        if(activeItems.find(item => item == value)) {
+            const newArray = activeItems.filter(item => item != value);
+            setActiveItems(newArray)
+        }
+    } 
+   }
     const showSide = () => {
        return selectSide == 'front' ? <BodyFront getItemsArea={getItemsArea} pic={bodyFront}/> : <BodyBack getItemsArea={getItemsArea} pic={bodyBack}/> ;
     }
     useEffect(() => {
-        setActiveItem('')
         setItemsArea('')
     }, [selectSide])
     return (
@@ -49,10 +73,10 @@ export default function SelectPartBody() {
                     <div className="w-2/5 sm:w-[53%] pt-3">
                         {
                             itemsArea.length == 0 ? (
-                                <div className="w-[90%] h-max p-2 text-center font-bold text-676767 bg-zinc-200 mx-auto rounded-xl text-sm">لطفاََابتدا ناحیه مورد نظر را انتخاب کنید</div>
+                                <div className="w-[90%] h-max p-2 text-center font-bold text-676767 bg-zinc-200 mx-auto rounded-xl text-xs sm:text-sm">لطفاََابتدا ناحیه مورد نظر را انتخاب کنید</div>
                             ) : (
                                 <div className="w-full h-full flex flex-col items-center pt-3">
-                                    <SelectAreaContainer items={itemsArea} activeItem={activeItem} getArea={getActiveItem}/>
+                                    <SelectAreaContainer items={itemsArea} deleteItem={deleteItemSelected} activeItemFind={itemActiveFind} getArea={getActiveItems}/>
                                 </div>
                             )
                         }
@@ -65,7 +89,7 @@ export default function SelectPartBody() {
             <div className="w-full h-max flex flex-col gap-4">
                 <div className="text-md font-bold text-676767">نواحی انتخاب شده</div>
                 <div className="w-full h-max flex flex-row gap-2 flex-wrap">
-                    <ItemsAreaSelected items={itemsSelected} deleteItem={deleteItemSelected}/>
+                    <ItemsAreaSelected getAreas={getAreas} items={activeItems} deleteItem={deleteItem}/>
                 </div>
             </div>
         </div>

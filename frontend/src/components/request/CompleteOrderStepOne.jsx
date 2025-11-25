@@ -5,43 +5,37 @@ import ChooseInsurance from './ChooseInsurance'
 import CompleteTitle from '../CompleteTitle'
 import RequestButton from './RequestButton'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { InputWithLabel } from './Inputs'
-import Button from '../general/Button'
+import { useDispatch, useSelector } from 'react-redux'
 import TextError from './TextError'
 import Symptoms from './symptoms'
 import { useState } from 'react'
 import z from 'zod'
 import Notification from '../general/Notification'
 import CheckAuth from '../../services/hook/CheckAuth'
-import EnterCode from './EnterCode'
+import { getShowModal } from '../../slices/modalSlice'
+import {getTypeRequest, getTypeRequestService} from '../../services/func/getTypeRequest'
+import registerRequestService from '../../services/api/registerRequestService'
 
 const schema = z.object({
-    fullName: z.string().nonempty('این فیلد الزامی است').min(5, 'نام و نام خانوادگی باید حداقل ۵ کاراکتر باشد'),
-    nationalCode: z.string().nonempty('این فیلد الزامی است').length(10, 'کد ملی وارد شده معتبر نیست'),
+    service: z.string(),
+    area: z.string().array().nonempty('این فیلد الزامی است'),
     insurance: z.string().nonempty('این فیلد الزامی است'),
-    phoneNumber: z.string().nonempty('این فیلد الزامی است').regex(/^09\d{9}$/, "شماره تلفن وارد شده معتبر نیست").length(11, 'شماره تلفن وارد شده معتبر نیست'),
-    // city: z.string().nonempty('این فیلد الزامی است'),
-    explain: z.string().nonempty('این فیلد الزامی است').min(5, 'شرح حال باید حداقل ۵ کاراکتر باشد'),
-    otp: z.string().nonempty('این فیلد الزامی است').length(6, 'کد وارد شده معتبر نیست')
-});
-
+    explain: z.string().nonempty('این فیلد الزامی است'),
+})
 export default function CompleteOrderStepOne({selectStep}) {
-    const requestDefaultValue = useSelector(state => state.request);
+    // const requestDefaultValue = useSelector(state => state.request);
     const {register, handleSubmit, watch, setValue, getFieldState, control, formState: {errors, defaultValues,isValid, touchedFields, isSubmitting}} = useForm({
         resolver: zodResolver(schema),
         mode: 'onChange',
         defaultValues: {
-            fullName: requestDefaultValue.fullName,
-            nationalCode: requestDefaultValue.nationalCode,
-            insurance: requestDefaultValue.insurance,
-            phoneNumber: requestDefaultValue.phoneNumber,
-            explain: requestDefaultValue.explain,
-            otp: ''
+            service: '',
+            area: [],
+            insurance: '',
+            explain: '',
         }
     })
-    const getForMyself = (value) => {
-        setValue('myself', (value === 'formyself'))
+    const getAreas = (value) => {
+        setValue('area', value);
     }
     const getInsurance = (value) => {
         setValue("insurance", value)
@@ -53,79 +47,37 @@ export default function CompleteOrderStepOne({selectStep}) {
     const { getDataFromStepOne } = useRequestTools();
     const [showNotification, setShowNotification] = useState('');
     // authError, send, ''
-
+    const dispatch = useDispatch();
     const { checkAuthUser } = CheckAuth();
     const changeShowNotification = (value) => {
         setShowNotification(value)
     }
     const [enterCode, setEnterCode] = useState(false);
-    const handlerClick = () => {
-        if(!checkAuthUser()) {
-            setShowNotification('authError');
-        } else {
-            setShowNotification('send');
-        }
-    }
+    // const handlerClick = () => {
+    //     if(!checkAuthUser()) {
+    //         setShowNotification('authError');
+    //     } else {
+    //         setShowNotification('send');
+    //     }
+    // }
+    const {initialRegisterRequestMutation} = registerRequestService()
     const onSubmit = (data) => {
-        getDataFromStepOne(data);
-        // selectStep('step2');
         console.log(data)
+        initialRegisterRequestMutation.mutate({...data, price: 263000, service: getTypeRequestService()})
+        dispatch(getShowModal({item: 'payment'}));
+        console.log({...data, service: getTypeRequestService()})
     }
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col gap-5'>
-                <div className='w-full h-max p-1.5 sm:px-4 flex flex-col gap-3 rounded-2xl py-2 bg-white'>
-                    <CompleteTitle title={'اطلاعات هویتی بیمار را وارد کنید'} />
-                    <div className='w-full h-max flex flex-col sm:flex-row gap-3 sm:gap-2'>
-                        <div className='w-full sm:w-1/2'>
-                            <InputWithLabel  type={'text'} label={'نام و نام خانوادگی بیمار'} 
-                                placeholder={"مثال : اشکان حسنوندی"} register={register('fullName')} 
-                                hasError={errors.fullName} isValid={watch('fullName') ? getFieldStateValue('fullName'): false}/>
-                            {errors.fullName && <TextError message={errors.fullName.message}/>}
-                        </div>
-                        <div className='w-full sm:w-1/2'>
-                            <InputWithLabel label={'کد ملی '} placeholder={"مثال : 1234567890"}
-                                register={register('nationalCode')} isValid={watch('nationalCode') ? getFieldStateValue('nationalCode') : false} 
-                                hasError={errors.nationalCode}/>
-                            {errors.nationalCode && <TextError message={errors.nationalCode.message}/>}
-                        </div>
-                    </div>
-
-                    <div className='w-full h-max flex flex-col sm:flex-row gap-2 sm:gap-2'>
-                        <div className='w-full sm:w-1/2 h-max'>
-                            <InputWithLabel type={'text'} label={'شماره تلفن'} 
-                                placeholder={"مثال : 1234567890"} register={register('phoneNumber')} 
-                                hasError={errors.phoneNumber} isValid={watch('phoneNumber') ? getFieldStateValue('phoneNumber') : false}/>
-                            {errors.phoneNumber && <TextError message={errors.phoneNumber.message}/>}
-                        </div>
-                        <div className='w-full sm:w-1/2 h-max flex flex-col items-start justify-end gap-0'>
-                            {
-                                enterCode ? (
-                                    <div className={`w-full h-max flex flex-col gap-1 sm:pt-[9%]`}>
-                                        <EnterCode register={register('otp')} isValid={watch('otp') ? getFieldStateValue('otp') : false}/>
-                                        {errors.otp  && <TextError message={errors.otp.message}/>}
-                                    </div>
-                                ) : (
-                                    <div className='w-full h-max flex flex-row gap-2 sm:pt-[9%]'>
-                                        <Button type={'button'}  onClick={() => handlerClick()} text={'دریافت پیامک'} 
-                                        disable={errors.phoneNumber? true : (watch('phoneNumber')? false : true)}/>
-                                        <Button onClick={() => setEnterCode(true)} type={'button'} text={'ورود کد'} disable={false}/>
-                                    </div>
-
-                                )
-                            }
-                        </div>
-                    </div>
-                </div>
-
                 <div className='bg-white w-full h-max rounded-2xl px-1.5 sm:px-4 pb-2'>
-                    <SelectPartBody/>
+                    <SelectPartBody getAreas={getAreas}/>
                     <Symptoms register={register('explain')} isValid={watch('explain') ? getFieldStateValue('explain') : false} isError={errors?.explain} messageError={errors?.explain?.message}/>
                     <ChooseInsurance getInsurance={getInsurance}/>
                     {errors.insurance && <TextError message={errors.insurance.message}/>}
 
-                    <RequestButton type={'submit'} text="انتقال به درگاه برای پرداخت هزینه مشاوره پزشک متخصص با 10 % تخفیف 263.000 تومان " 
-                    isSubmitting={isSubmitting} textSubmitting={'در حال ثبت اطلاعات...'} disable={false}/>
+                    <RequestButton type={'submit'}  text="انتقال به درگاه برای پرداخت هزینه مشاوره پزشک متخصص با 10 % تخفیف 263.000 تومان " 
+                     textSubmitting={'در حال ثبت اطلاعات...'} disable={false}/>
                 </div>
             </form>
             {showNotification == 'authError' && <Notification change={() => changeShowNotification('')} 

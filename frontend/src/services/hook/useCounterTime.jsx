@@ -24,13 +24,18 @@ export default function useCounterTime() {
     const showTime = () => {
         if(tryAgain) {
             return (
-                <div className="w-max h-max flex flex-row items-center gap-1">
-                    <SlRefresh size={18}/>
+                <div className="w-max h-max flex flex-row text-main font-bold items-center gap-1">
+                    {/* <SlRefresh size={18}/> */}
                     <span>ارسال مجدد کد</span>
                 </div>
             )
         } else {
-            return `${counter} تا ارسال مجدد کد`
+            return (
+                <div className="w-max h-max flex flex-row items-center gap-1">
+                    {/* <SlRefresh size={18}/> */}
+                    <span>ارسال مجدد کد</span>
+                </div>
+            )
         }
     }
 
@@ -39,5 +44,5 @@ export default function useCounterTime() {
         setTryAgain(false)
         console.log("hi")
     }
-    return {showTime, tryAgain, resendCode}    
+    return {showTime, tryAgain,counter, resendCode}    
 }

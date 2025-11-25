@@ -27,7 +27,6 @@ export default function BodyFront({pic,getItemsArea}) {
     }
 
     const clickHandler = (area) => {
-        console.log(front[area])
         if(window.innerWidth > 470) {
             setPosition({top: `${front[area].position.top}%`, right: `${front[area].position.right}%`});
         } else {
@@ -36,8 +35,6 @@ export default function BodyFront({pic,getItemsArea}) {
         getItemsArea(front[area].options);
     }
     useEffect(() => {
-        console.log(position)
-
         console.log(window.innerWidth)
     } , [position])
     return (

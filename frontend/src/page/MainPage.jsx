@@ -6,17 +6,22 @@ import NavBar from '../layout/NavBar';
 import LoginModalContainer from '../components/login/LoginModalContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from '../slices/modalSlice';
+import HistoryModalContainer from '../components/history/HistoryModalContainer';
+import PaymentModalContainer from '../components/payment/PaymentModalContainer';
 // import ModalInformation from '../components/request/ModalInformation';
 
 export default function MainPage() {
   const container = useRef();
   const [activeSnap, setActiveSnap] = useState('snap1');
+  const [preScroll, setPrevScroll] = useState(8);
   const showModal = useSelector(state => state.modal.showItem)
   const dispatch = useDispatch();
 
   const showModalSelected = () => {
     switch(showModal) {
       case 'login': return <LoginModalContainer close={() => dispatch(closeModal())}/>
+      case 'payment': return <PaymentModalContainer close={() => dispatch(closeModal())}/>
+      case 'history': return <HistoryModalContainer close={() => dispatch(closeModal())}/>
       // case 'information': return <ModalInformation close={() => dispatch(closeModal())}/>
     }
   }
@@ -31,10 +36,11 @@ export default function MainPage() {
           }
         })
       },
-      { root:container.current, threshold: 0.7 }//min 50% from element
+      { root:container.current, threshold: 0.8 }//min 50% from element
     );
     sections.forEach(sec => observer.observe(sec));
     return () => observer.disconnect();
+    
   },[]) 
   const changeSnap = (val) => {
     setActiveSnap(val);

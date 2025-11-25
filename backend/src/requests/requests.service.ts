@@ -4,11 +4,23 @@ import { UpdateRequestDto } from './dto/update-request.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Request, RequestDocument } from './entities/request.entity';
 import { Model, Types } from 'mongoose';
+import { DraftService } from './draft.service';
 
 @Injectable()
 export class RequestsService {
-  constructor(@InjectModel(Request.name) private requestModel: Model<RequestDocument>){}
+  constructor(@InjectModel(Request.name) private requestModel: Model<RequestDocument>,
+  private draftService: DraftService){}
   
+  async saveRequestDraft(tempId:string, formData:any) {
+    return await this.draftService.saveDraft(tempId, formData);
+  }
+  async getDraft(userKey:string) {
+    return await this.draftService.getDraft(userKey);
+  }
+  async deleteDraft(userKey:string) {
+    return await this.draftService.deleteDraft(userKey)
+  }
+  // -----------------------------------------------------------------
   async createOtherRequest(createRequestDto: CreateRequestDto) {
     const request = await this.requestModel.create(createRequestDto);
     if(!request) throw new BadRequestException('خطا در ایجاد درخواست')

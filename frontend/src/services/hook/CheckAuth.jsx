@@ -15,7 +15,8 @@ export default function CheckAuth() {
     const logout = () => {
         Cookies.remove('accessToken');
         Cookies.remove('id');
-        localStorage.removeItem('order');
+        Cookies.remove('tempId');
+        // localStorage.removeItem('order');
         location.reload();
     }
 

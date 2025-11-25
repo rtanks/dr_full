@@ -4,7 +4,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,) {}
 
   @Post('user/register')
   async register(@Body() createUserDto:CreateUserDto) {
@@ -12,17 +12,17 @@ export class AuthController {
   }
 
   @Post('user/login')
-  async login(@Body('nationalCode') nationalCode:string){
-    return await this.authService.login(nationalCode);
+  async login(@Body() body: {fullName: string, nationalCode: string, phoneNumber: string}){
+    return await this.authService.login(body.fullName, body.nationalCode, body.phoneNumber);
   }
 
-  @Post('reagent/register') 
-  async registerReagent(@Body('fullName') fullName:string, @Body('nationalCode') nationalCode:string, @Body('phoneNumber') phoneNumber:string){
-    return await this.authService.registerReagent(fullName, nationalCode, phoneNumber);
+  @Post('retry-otp')
+  async retryOtp(@Body('phoneNumber') phoneNumber:string) {
+    return await this.authService.retryOtp(phoneNumber);
   }
 
-  @Post('reagent/login')
-  async loginReagent(@Body('nationalCode') nationalCode:string){
-    return await this.authService.loginReagent(nationalCode);
+  @Post('verify-otp')
+  async verifyOtp(@Body('phoneNumber') phoneNumber:string, @Body('otp') otp:number) {
+    return await this.authService.verifyOtp(phoneNumber, otp);
   }
 }

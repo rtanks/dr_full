@@ -1,21 +1,16 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsMongoId, IsNumber, IsObject, IsOptional, IsString } from "class-validator";
 
 
 export class CreateRequestDto {
-    @IsString()
+    @IsMongoId()
     userId: string;
 
-    @IsString()
-    service: string;
+    @IsObject()
+    request: any;
+        
+    @IsBoolean()
+    statusPay: boolean;
 
-    @IsNumber()
-    @IsOptional()
-    price?: number;
-
-    @IsString()
-    explain: string;
-
-    @IsString()
-    @IsOptional()
-    center?: string;
+    @IsMongoId()
+    transactionId: string;
 }

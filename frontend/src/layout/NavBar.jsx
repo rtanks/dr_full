@@ -4,6 +4,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import { FaHandsHelping } from "react-icons/fa";
 import { BiLoaderCircle } from "react-icons/bi";
+import animatedIcon from '../assets/images/animated.svg'
 
 
 export default function NavBar({activeSnap, scrollHandler}) {
@@ -20,7 +21,7 @@ export default function NavBar({activeSnap, scrollHandler}) {
                 <span className="text-xs">خدمات پزشکی</span>
             </div>
             <div onClick={() => {scrollHandler('snap2')}} className={`w-max h-max items-center flex flex-col gap-1 ${active('snap2')}`}>
-                <BiLoaderCircle size={26}/>
+                {activeSnap == 'snap2' ? <img src={animatedIcon} alt="hi" className="w-[26px] h-[26px]"/> : <BiLoaderCircle size={26}/>}
                 <span className="text-xs">در حال انجام</span>
             </div>
             <div onClick={() => {scrollHandler('snap3')}} className={`w-max h-max items-center flex flex-col gap-1 ${active('snap3')}`}>

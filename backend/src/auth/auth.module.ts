@@ -6,7 +6,7 @@ import { QrModule } from 'src/qr/qr.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import { ReagentModule } from 'src/reagent/reagent.module';
+import { OtpModule } from 'src/otp/otp.module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { ReagentModule } from 'src/reagent/reagent.module';
     }),
     UsersModule,
     QrModule,
-    ReagentModule
+    OtpModule
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy]

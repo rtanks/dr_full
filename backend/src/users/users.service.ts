@@ -8,21 +8,21 @@ import { RequestsService } from 'src/requests/requests.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private readonly requestService:RequestsService){}
-
-  async registerOtherUser(createUserDto:CreateUserDto, explain: string, service:string, title: string, center: string) {
-    const userExisting = await this.userModel.findOne({nationalCode: createUserDto.nationalCode});
-    if(userExisting) {
-      throw new BadRequestException('کاربر در حال حاضر موجود است');
-    }
-    const user = await this.userModel.create(createUserDto);
-    if(!user) throw new BadRequestException('خطا در ایجاد کاربر')
-    const request = await this.requestService.createOtherRequest({userId: String(user._id), explain , service})
-    return [user, request];
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, 
+  private readonly requestService:RequestsService){}
+  
+  async loginAndRegister(fullName:string, nationalCode:string, phoneNumber:string ) {
+    const existingUser = await this.userModel.findOne({phoneNumber});
+    if(!existingUser) {
+      const user = await this.userModel.create({fullName, nationalCode, phoneNumber});
+      if(!user) throw new BadRequestException('خطا در ایجاد کاربر')
+      return {message: "register success", data: user};
+    } 
+    return {message: "login success", data: existingUser};
   }
   
   async register(createUserDto:CreateUserDto){
-    const userExisting = await this.findByNationalCode(createUserDto.nationalCode);
+    const userExisting = await this.findByPhoneNumber(createUserDto.phoneNumber);
     if(userExisting) {
       throw new BadRequestException('کاربر در حال حاضر موجوداست');
     }
@@ -30,7 +30,14 @@ export class UsersService {
     if(!user) throw new BadRequestException('خطا در ایجاد کاربر')
     return user;
   }
-
+  async login(phoneNumber: string){
+    const userExisting = await this.findByPhoneNumber(phoneNumber);
+    if(!userExisting) {
+      throw new BadRequestException('کاربر مورد نظر یافت نشد');
+    }
+    return userExisting;
+  }
+  
   async users() {
     return await this.userModel.find().sort({createdAt: -1}).exec();
   }
@@ -41,18 +48,11 @@ export class UsersService {
     return user;
   }
 
-  async findByNationalCode(nationalCode:string) {
-    const existingUser = await this.userModel.findOne({ nationalCode }).exec();
+  async findByPhoneNumber(phoneNumber:string) {
+    const existingUser = await this.userModel.findOne({ phoneNumber });
     return existingUser;
   }
 
-  async login(nationalCode:string){
-    const userExisting = await this.findByNationalCode(nationalCode);
-    if(!userExisting) {
-      throw new BadRequestException('کاربر مورد نظر یافت نشد');
-    }
-    return userExisting;
-  }
   
   async editUser(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.userModel.findByIdAndUpdate(id, updateUserDto); 

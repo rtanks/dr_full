@@ -1,11 +1,11 @@
-export default function SelectAreaItem({items, activeItem, getItem, boxSize}) {
+export default function SelectAreaItem({items, activeItemFind, getActiveItems, deleteItem, boxSize}) {
     return (
         <>
             {
                 items.map((item, index) => (
-                    <div key={index} onClick={() => getItem(item)} className={`text-sm sm:text-md font-bold py-2 px-3 rounded-lg ${boxSize}
-                        ${activeItem == item ? "bg-blue-200 text-blue-700" : "text-676767 bg-gray-200"} text-center hover:cursor-pointer
-                        `}>
+                    <div key={index} onClick={() => {getActiveItems(item);deleteItem(item)}} className={`text-sm sm:text-md font-bold py-2 px-3 rounded-lg ${boxSize}
+                        ${activeItemFind(item) ? "bg-select-container text-select" : 
+                        "text-unselect bg-unselect-container"} text-center hover:cursor-pointer`}>
                         {item}
                     </div>
                 ))

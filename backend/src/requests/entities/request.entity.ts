@@ -1,22 +1,19 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 
-@Schema()
+@Schema({timestamps: true, })
 export class Request {
-    @Prop()
-    userId: string;
+    @Prop({type: Types.ObjectId, ref: 'User'})
+    userId: Types.ObjectId;
 
-    @Prop()
-    service: string;
+    @Prop({type: Object})
+    request: any;
+    
+    @Prop({default: false})
+    statusPay: boolean;
 
-    @Prop({default: 0})
-    price: number;
-
-    @Prop()
-    explain: string;
-
-    @Prop({default: ''})
-    center: string;
+    @Prop({type: Types.ObjectId, ref: "Payment"})
+    transactionId: Types.ObjectId;
 }
 export type RequestDocument = HydratedDocument<Request>;
 export const RequestSchema = SchemaFactory.createForClass(Request);
