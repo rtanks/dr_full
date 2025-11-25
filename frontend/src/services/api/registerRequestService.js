@@ -15,7 +15,7 @@ export default function registerRequestService() {
         const response = await axios.post(`${baseUrl}/requests/create-draft`, {tempId , data}, 
             {headers:{'Content-Type': 'application/json'}});
             // syntax post(url, body,{ header})
-        Cookies.set('tempId', tempId);
+        Cookies.set('tempId', tempId, {secure: true});
         return response;
     }
     const initialRegisterRequestMutation = useMutation({
