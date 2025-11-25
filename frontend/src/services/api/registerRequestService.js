@@ -12,7 +12,8 @@ export default function registerRequestService() {
     const tempId = uuidV4();
     const initialRegisterRequest = async (data) => {
         console.log({tempId , data})
-        const response = await axios.post(`${baseUrl}/requests/create-draft`, {tempId , data}, {headers});
+        const response = await axios.post(`${baseUrl}/requests/create-draft`, {tempId , data}, 
+            {headers:{'Content-Type': 'application/json'}});
             // syntax post(url, body,{ header})
         Cookies.set('tempId', tempId);
         return response;
