@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
 
-// export const baseUrl = 'http://localhost:5000';
 export const baseUrl = 'https://api.tda24.ir';
 export default function HeaderAuth() {
     const baseUrl = 'https://api.tda24.ir';
