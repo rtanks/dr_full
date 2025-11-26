@@ -21,7 +21,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: true,
-    // credential: true
+    credential: true
   })
 
   const port = 443

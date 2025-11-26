@@ -1,7 +1,7 @@
 export function MriIcon({size, color}) {
     return(
         <>
-            <svg fill={color? color : "#000000" } height={`${size}px`} width={`${size}px`} version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" 
+            <svg fill={color? color : "#000000" } height={`${size}px`} width={`${size}px`} version="1.1" id="Capa_1" xmlns="https://www.w3.org/2000/svg" xmlnsXlink="https://www.w3.org/1999/xlink" 
             	 viewBox="0 0 199.445 199.445" xmlSpace="preserve">
             <path d="M99.722,0C53.276,0,14.038,33.262,14.038,72.634v103.374c0,4.142,3.358,7.5,7.5,7.5h44.236v8.438c0,4.142,3.358,7.5,7.5,7.5
             	h52.902c4.142,0,7.5-3.358,7.5-7.5v-8.438h44.23c4.142,0,7.5-3.358,7.5-7.5V72.634C185.407,33.262,146.168,0,99.722,0z
