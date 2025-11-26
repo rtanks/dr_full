@@ -1,8 +1,5 @@
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-import Reagent from './page/reagent/Reagent'
-import LoginReagent from './page/reagent/LoginReagent'
 import MainPage from './page/MainPage'
-import ReagentQrcode from './page/reagent/ReagentQrcode'
 import NoPage from './page/NoPage'
 
 import Test from './page/Test'
@@ -39,11 +36,7 @@ export default function RoutesList() {
                 </Route>
                 <Route path='/payment/success' element={<Success/>}/>
                 <Route path='/payment/failed' element={<Failed/>}/>
-                {/* reagent */}
-                {/* <Route element={<Reagent/>}>
-                    <Route path='reagent/qrcode' element={<ReagentQrcode/>}/>
-                    <Route path='/reagent/login' element={<LoginReagent/>}/>
-                </Route> */}
+                
             </Routes>
         </BrowserRouter>
     )
