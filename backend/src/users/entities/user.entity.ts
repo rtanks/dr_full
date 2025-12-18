@@ -17,6 +17,16 @@ export class User {
 
     @Prop({default: ''})
     city?: string;
+
+    @Prop()
+    birthday?: string;
+
+    @Prop({type: Object})
+    location?: any;
+    //{lat, lng}
+
+    @Prop()
+    address?: string;
 }
 export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -13,6 +13,9 @@ const getValuesLocal = () => {
             insurance:'آزاد',
             province: '',
             city: '',
+            birthday: '',
+            address: '',
+            location: null,//{lat,lng}
             explain: '',
             center:''
         }
@@ -33,6 +36,11 @@ export const RequestSlice = createSlice({
             state.fullName = action.payload.fullName;
             state.nationalCode = action.payload.nationalCode;
             state.phoneNumber = action.payload.phoneNumber;
+            state.birthday = action.payload.birthday;
+            state.city = action.payload.city;
+            state.province = action.payload.province;
+            state.location = action.payload.location;
+            state.address = action.payload.address;
         },
         getInfoStep2: (state, action) => {
             state.step2 = action.payload;

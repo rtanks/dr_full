@@ -18,7 +18,7 @@ export class QrService {
     const cached = this.cache.get(key);
     if(cached && cached.expireAt > now) return cached.dataUrl;
 
-    const dataUrl = await QrCode.toDataURL(text, opts);
+    const dataUrl = await QrCode.toDataURL(text, {...opts,margin: 0});
     this.cache.set(key, {dataUrl, expireAt: now + this.ttl});
 
     return dataUrl;

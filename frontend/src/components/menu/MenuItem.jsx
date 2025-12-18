@@ -4,11 +4,11 @@ import React from "react";
 
 export default function MenuItem({title, children, path, onClick}) {
     const baseClass = classNames({
-        "w-full h-max flex flex-row items-center gap-2 py-2 px-2 rounded-xl text-sm ": true
+        "w-full h-max flex flex-row items-center gap-2 py-2.5 sm:py-2 px-2 rounded-xl text-sm ": true
     })
     const childrenStyled = React.cloneElement(children, {
         color: path == location.pathname ? "#ffffff" : "#000000",
-        size: 20
+        size: 22
     })
     return (
         <NavLink to={path} onClick={onClick} 

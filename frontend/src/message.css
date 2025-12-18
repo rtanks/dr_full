@@ -1,0 +1,60 @@
+:root{
+      --green-900:#0d6b3b;
+      --green-800:#0f8f4f;
+      --green-700:#15a35d;
+      --green-light:#e6fbf2;
+      --green-hover:#d2f5e4;
+      --gray-500:#64748b;
+      --gray-300:#cbd5e1;
+      --gray-100:#f9fafb;
+      --white:#ffffff;
+      --radius:12px;
+      --shadow:0 6px 20px rgba(0,0,0,0.08);
+    }
+    
+    main{max-width:800px; margin:20px auto; padding:0 20px}
+    .card{
+      background:var(--white);
+      border-radius:var(--radius); box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card-header{padding:10px 18px; font-weight:700; color:var(--green-800)}
+    .messages{display:flex; flex-direction:column; gap:0px}
+    .msg{
+      border:1px solid var(--gray-300); border-radius:var(--radius);
+      padding:12px 14px; background:var(--white);
+      display:flex; flex-direction:column; gap:8px;
+      transition:.2s ease; cursor:pointer;
+      -webkit-tap-highlight-color: transparent; /* حذف هایلایت آبی در موبایل */
+    }
+    .msg.read{background:var(--white);}
+    .msg.read:hover{background:#fdfdfd;}
+    .msg.unread{background:var(--green-light); border-color:var(--green-700);}
+    .msg.unread:hover{background:var(--green-hover);}
+    .msg-header{display:flex; justify-content:space-between; align-items:center}
+    .msg-title{font-weight:700; display:flex; align-items:center; gap:8px; color:var(--green-800)}
+    .status-dot{
+      width:12px; height:12px; border-radius:50%;
+      background:var(--green-700);
+    }
+    .msg.read .status-dot{background:var(--gray-300)}
+    .btn-link{
+      background:var(--green-800); color:#fff; border:none; border-radius:8px;
+      padding:6px 12px; font-size:12px; cursor:pointer;
+      -webkit-tap-highlight-color: transparent; /* حذف هایلایت آبی */
+    }
+    .btn-link:hover{background:var(--green-900)}
+    .msg-body{
+      font-size:14px; color:#333; overflow:hidden;
+      display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical;
+    }
+    .msg.expanded .msg-body{-webkit-line-clamp:unset}
+    .msg-footer{
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:12px; color:var(--gray-500); margin-top:4px;
+    }
+    .toggle-label{
+      color:var(--green-800); font-weight:600; font-size:12px;
+      -webkit-tap-highlight-color: transparent; /* حذف هایلایت آبی */
+    }
+    .date-time{white-space:nowrap;}

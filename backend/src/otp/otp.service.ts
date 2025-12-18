@@ -21,27 +21,28 @@ export class OtpService {
         const lastHour = new Date(Date.now() - 216000000)
         const count = await this.otpModel.countDocuments({phoneNumber, createdAt: {$gte: lastHour}})
 
-        if(count > 5) {
+        if(count > 10) {
             throw new ForbiddenException('تعداد درخواست بیش از حد است، لطفاً بعداً تلاش کنید.')
         }
-        const code = crypto.randomInt(100000, 999999);
+        const code = crypto.randomInt(1000, 9999);
         const expires = new Date(Date.now() + 120000);
         console.log(expires)
         const otp = await this.otpModel.create({phoneNumber , code, expiresAt: expires});
 
-        const data = {mobile: phoneNumber, templateId: 744300, parameters: [{name: "CODE" , value: code}],};
-        const config = {method: 'post',url: 'https://api.sms.ir/v1/send/verify',  
-            headers: {'Content-Type': 'application/json','Accept': 'text/plain','x-api-key': 'L40UGRICQDvHN3F93OuDafT0xiom3okCphDgtrAfYjpng77f9ZzNaahQGyp9wI5b'},
-            data : data};
-        const sms = await axios.post(config.url, data, 
-            {headers: config.headers}).then(res => res).catch(err => {
+        const data = JSON.stringify({mobile: phoneNumber, templateId: '744300', 
+            parameters: [{name: "CODE" , value: String(code)}],});
+        const sms = await axios.post('https://api.sms.ir/v1/send/verify', data, 
+            {headers: {
+                'Content-Type': 'application/json','Accept': 'text/plain',
+                'x-api-key': 'L40UGRICQDvHN3F93OuDafT0xiom3okCphDgtrAfYjpng77f9ZzNaahQGyp9wI5b'
+            }}).then(res => res).catch(err => {
                 this.otpModel.deleteOne({ _id: otp._id });
                 throw new BadRequestException(
-                    err.data || 'خطا در ارسال پیامک'
+                    err.response || 'خطا در ارسال پیامک'
                 );
             })
         
-        // return {otp, nowDate};
+        // return {otp};
         return sms.data;
     }
 

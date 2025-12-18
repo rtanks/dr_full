@@ -1,56 +1,125 @@
 import z from "zod";
 import Button from "../general/Button";
-import { Input } from "../request/Inputs";
+import { Input, InputWithLabel } from "../request/Inputs";
 import { useForm } from "react-hook-form";
 import TextError from "../request/TextError";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginService from "../../services/api/loginService";
+import SelectElem from "../general/SelectElem";
+import {shahr, ostan} from "iran-cities-json";
+import { useState } from "react";
+import CompleteTitle from "../CompleteTitle";
+import Calender from "../general/date.picker/Calender";
+import SetProvinces from "../general/SetProvinces";
+import SetCities from "../general/SetCity";
+import { useNavigate } from "react-router-dom";
+import { getReagentCode } from "../../services/func/getTypeRequest";
 
 const schema = z.object({
-    fullName: z.string().nonempty('این فیلد الزامی است').min(5, 'نام و نام خانوادگی باید حداقل ۵ کاراکتر باشد'),
+    fullName: z.string().nonempty('این فیلد الزامی است'),
     nationalCode: z.string().nonempty('این فیلد الزامی است').length(10, 'کد ملی وارد شده معتبر نیست'),
     phoneNumber: z.string().nonempty('این فیلد الزامی است').regex(/^09\d{9}$/, "شماره تلفن وارد شده معتبر نیست").length(11, 'شماره تلفن وارد شده معتبر نیست'),
-})
+    province: z.string().optional(),
+    city: z.string().optional(),
+    birthday: z.string().optional(),
+    regentCode: z.string().optional(),
+}).refine(
+    async (val) => val.fullName.split(' ').filter(n => n.length > 0).length >= 2, 
+    {message: 'نام و نام خانوادگی وارد شده معتبر نیست', path: ['fullName']}
+);
 
-export default function Register({changeItemShow}) {
-    const {register,handleSubmit, watch, getFieldState, control, formState:{errors, isValid}} = useForm({
+export default function Register({phoneNumber}) {
+    const navigate = useNavigate();
+    const [modal, setModal] = useState(false);
+    const [province, setProvince] = useState({
+      id: 0,
+      name: "",
+      slug: "",
+      tel_prefix: "",
+    });
+    const {register,handleSubmit, setValue, watch, getFieldState, control, formState:{errors, isValid}} = useForm({
         resolver: zodResolver(schema),
         mode: 'onChange',
         defaultValues: {
             fullName: '',
             nationalCode: '',
-            phoneNumber: '',
+            phoneNumber: phoneNumber,
+            province: "",
+            city: "",
+            birthday: "",
+            regentCode: getReagentCode(),
         }
     })
     const getFieldStateValue = () => {
         const {invalid} = getFieldState('nationalCode', control);
         return !invalid;
     }
+    const getDataForForm = (key, value) => {
+        console.log(key,value)
+        setValue(key, value)
+    }
+    const getBirthday = (value) => {
+        console.log(value)
+        setValue('birthday', value)
+    }
+    
     const {registerMutation} = loginService();
     
     const onSubmit = (data) => {
+        const {regentCode, ...formData} = data;
         console.log(data);
-        // registerMutation.mutate(data);
+        console.log(formData)
+        registerMutation.mutateAsync(formData).then(res => navigate('/profile'));
     }
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="w-full h-full flex flex-col gap-5 mx-auto items-center justify-start">
+                <CompleteTitle title={' برای ثبت نام اطلاعات زیر را وارد کنید'}/>
                 <div className="w-full h-max flex flex-col gap-1">
-                    <Input register={register('fullName')} isValid={watch('fullName')? getFieldStateValue(): false} hasError={errors.fullName} type={'text'} placeholder={'نام و نام خانوادگی'}/>
-                    {errors.fullName && <TextError message={errors?.fullName?.message}/>}
-                    
-                    <Input register={register('nationalCode')} mode={'numeric'} isValid={watch('nationalCode')? getFieldStateValue(): false} hasError={errors.nationalCode} type={'text'} placeholder={'کدملی'}/>
-                    {errors.nationalCode && <TextError message={errors?.nationalCode?.message}/>}
-                    
-                    <Input register={register('phoneNumber')} mode={'numeric'} isValid={watch('phoneNumber')? getFieldStateValue(): false} hasError={errors.phoneNumber} type={'text'} placeholder={'شماره تماس'}/>
-                    {errors.phoneNumber && <TextError message={errors?.phoneNumber?.message}/>}
+                    <div className='w-full'>
+                        <InputWithLabel  type={'text'} label={'نام و نام خانوادگی'} readonly={false}
+                            placeholder={"مثال : اشکان حسنوندی"} register={register('fullName')} 
+                            hasError={errors.fullName} isValid={watch('fullName') ? getFieldStateValue('fullName'): false}/>
+                        {errors.fullName && <TextError message={errors.fullName.message}/>}
+                    </div>
+                    <div className='w-full'>
+                        <InputWithLabel label={'کد ملی '} mode={'numeric'} placeholder={"مثال : 1234567890"} maxLength={10}
+                            register={register('nationalCode')} isValid={watch('nationalCode') ? getFieldStateValue('nationalCode') : false} 
+                            hasError={errors.nationalCode}/>
+                        {errors.nationalCode && <TextError message={errors.nationalCode.message}/>}
+                    </div> 
+                    <div className='w-full'>
+                        {/* <Calender title="تاریخ تولد"
+                            name="constructionDate"
+                            setModal={setModal}
+                            modal={modal}
+                            set={getDataForForm}
+                            style={'w-full'}
+                            /> */}
+                        <Calender getDate={getBirthday} placeholder={'تاریخ تولد'}/>
+                        {errors.birthday && <TextError message={errors.birthday.message}/>}
+                    </div> 
+
+                    <div className="w-full h-max flex flex-row items-center gap-2 mt-2">
+                        <SetProvinces 
+                            setData={getDataForForm}
+                            setProvince={setProvince}
+                            province={province.name}
+                        />
+                        <SetCities
+                            setData={getDataForForm}
+                            province={province}
+                        />
+                    </div>
                 </div>
-                <Button text={'ثبت کاربر'} isSubmitting={registerMutation.isPending} disable={!isValid} textSubmitting={"در حال ارسال اطلاعات"}/>
+                <div className='w-full'>
+                    <InputWithLabel label={'کد معرف'} mode={'numeric'} placeholder={getReagentCode()} maxLength={10}
+                        register={register('regentCode')} isValid={watch('regentCode') ? getFieldStateValue('regentCode') : false} 
+                        hasError={errors.regentCode}/>
+                    {errors.regentCode && <TextError message={errors.regentCode.message}/>}
+                </div> 
+                <Button text={'ثبت کاربر'}  disable={!isValid} isSubmitting={registerMutation.isPending} textSubmitting={"در حال ارسال اطلاعات"}/>
             </form>
-            <div className='w-full h-max'>
-                <p className='text-sm text-a7a7a7 mt-1'>اگر پیش‌تر حساب کاربری ایجاد کرده‌اید، از این بخش وارد شوید</p>
-                <button type='button' onClick={() => changeItemShow('login')} className='w-full h-12 mt-3 border-[1.6px] rounded-lg border-[#D1D5DB] text-[#B1B5BB]'>ورود به حساب کاربری</button>
-            </div>
         </>
     )
 }

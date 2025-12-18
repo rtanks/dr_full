@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './entities/user.entity';
 import { Model } from 'mongoose';
-import { RequestsService } from 'src/requests/requests.service';
+import { RequestsService } from '../requests/requests.service';
 
 @Injectable()
 export class UsersService {
@@ -41,6 +41,9 @@ export class UsersService {
   async users() {
     return await this.userModel.find().sort({createdAt: -1}).exec();
   }
+  async usersFindWithCityProvince(city:string, province:string) {
+    return await this.userModel.find({city, province});
+  }
 
   async findUserById(id: string) {
     const user = await this.userModel.findById(id).exec();
@@ -53,7 +56,6 @@ export class UsersService {
     return existingUser;
   }
 
-  
   async editUser(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.userModel.findByIdAndUpdate(id, updateUserDto); 
     if(!user) throw new NotFoundException('کاربر مورد نظر یافت نشد')
@@ -65,4 +67,34 @@ export class UsersService {
     if(!user) throw new NotFoundException('کاربر مورد نظر یافت نشد')
     return user;
   }
+
+  async createUserAndRequest(createUserDto:CreateUserDto,requestData:any) {
+    const userExisting = await this.findByPhoneNumber(createUserDto.phoneNumber);
+    if(userExisting) {
+      const request = await this.requestService.createRequest(String(userExisting._id),'hospital',requestData);
+      return {request, user: userExisting}
+    }
+    const user = await this.userModel.create(createUserDto);
+    if(!user) {
+      throw new BadRequestException('خطا در ایجاد کاربر!')
+    } 
+    const request = await this.requestService.createRequest(String(user._id),'hospital',requestData);
+    return {request, user}
+  }
+  async updateUserAndRequest(id:string, updateUserDto: Partial<UpdateUserDto>, requestId:string ,requestData:any) {
+    const user = await this.userModel.findByIdAndUpdate(id, updateUserDto)
+    if(!user) {
+      throw new BadRequestException('کاربر یافت نشد!')
+    } 
+    const request = await this.requestService.updateRequestAllData(requestId,requestData);
+    return {request, user}
+  }
+
+  async searchUser(key: string, value: string){
+    const users = await this.userModel.find({[key]: {$regex: value, $options: 'i'}});
+    if(!users) throw new BadRequestException('کاربری یافت نشد!');
+    return users;
+  }
+
+
 }

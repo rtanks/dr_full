@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Res, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import type { Response } from 'express';
 import { QrService } from 'src/qr/qr.service';
+import { CreateRequestDto } from 'src/requests/dto/create-request.dto';
+import path from 'path';
 
 @Controller('users')
 export class UsersController {
@@ -19,13 +21,20 @@ export class UsersController {
   async login(@Body('phoneNumber') phoneNumber: string) {
     return await this.usersService.login(phoneNumber);
   }
+  @Post('create-user/request')
+  async createUserAndRequest(@Body('user') createUserDto:CreateUserDto, @Body('request') request:any){
+    return await this.usersService.createUserAndRequest(createUserDto, request);
+  }
 
+  @Get('admin/users/search')
+  async searchUser(@Query('key') key:string, @Query('value') value:string){
+    return await this.usersService.searchUser(key, value);
+  }
   @Get()
   async users() {
     const users = await this.usersService.users()
     return {message: "ok", data: users};
   }
-
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   async findUserById(@Param('id') id: string) {
@@ -50,6 +59,11 @@ export class UsersController {
   @Patch('edit/:id')
   async editUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.editUser(id, updateUserDto);
+  }
+  @Patch('update-user')
+  async updateUserAndRequest(@Body('id') id:string,@Body('user') user:Partial<UpdateUserDto>, 
+  @Body('requestId') requestId:string ,@Body('request') request:any) {
+    return await this.usersService.updateUserAndRequest(id, user, requestId, request)
   }
 
   @Delete('/delete-user/:id')

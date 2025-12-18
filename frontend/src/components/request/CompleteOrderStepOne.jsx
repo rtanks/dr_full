@@ -1,32 +1,36 @@
-import useRequestTools from '../../services/hook/useRequestTools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import SelectPartBody from './body/SelectPartBody'
 import ChooseInsurance from './ChooseInsurance'
-import CompleteTitle from '../CompleteTitle'
 import RequestButton from './RequestButton'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import TextError from './TextError'
 import Symptoms from './symptoms'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import z from 'zod'
 import Notification from '../general/Notification'
 import CheckAuth from '../../services/hook/CheckAuth'
 import { getShowModal } from '../../slices/modalSlice'
-import {getTypeRequest, getTypeRequestService} from '../../services/func/getTypeRequest'
+import {getKeyRequest, getTypeRequest, getTypeRequestService} from '../../services/func/getTypeRequest'
 import registerRequestService from '../../services/api/registerRequestService'
+import { useNavigate } from 'react-router-dom'
+import HeaderRequestStatus from './HeaderRequestStatus'
+import LoadingGateway from '../payment/LoadingGateway'
+import VoiceRecorder from './VoiceRecorder'
 
 const schema = z.object({
     service: z.string(),
-    area: z.string().array().nonempty('این فیلد الزامی است'),
+    area: z.string().array().nonempty('لطفا ناحیه یا نواحی مورد نظر را انتخاب کنید!'),
     insurance: z.string().nonempty('این فیلد الزامی است'),
     explain: z.string().nonempty('این فیلد الزامی است'),
 })
-export default function CompleteOrderStepOne({selectStep}) {
+export default function CompleteOrderStepOne() {
+    const navigate = useNavigate();
+    const container = useRef();
     // const requestDefaultValue = useSelector(state => state.request);
-    const {register, handleSubmit, watch, setValue, getFieldState, control, formState: {errors, defaultValues,isValid, touchedFields, isSubmitting}} = useForm({
+    const {register, handleSubmit, setFocus, watch, setValue, getFieldState, control, formState: {errors, defaultValues,isValid, touchedFields, isSubmitting}} = useForm({
         resolver: zodResolver(schema),
-        mode: 'onChange',
+        mode: "all",
         defaultValues: {
             service: '',
             area: [],
@@ -34,57 +38,70 @@ export default function CompleteOrderStepOne({selectStep}) {
             explain: '',
         }
     })
-    const getAreas = (value) => {
-        setValue('area', value);
-    }
-    const getInsurance = (value) => {
-        setValue("insurance", value)
-    }
+    const getAreas = (value) => { setValue('area', value); }
+    const getInsurance = (value) => { setValue("insurance", value) }
     const getFieldStateValue = (fieldName) => {
         const {invalid} = getFieldState(fieldName, control);
         return !invalid;
     }
-    const { getDataFromStepOne } = useRequestTools();
-    const [showNotification, setShowNotification] = useState('');
+    const [showNotification, setShowNotification] = useState({key: '', text: ''});
     // authError, send, ''
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const { checkAuthUser } = CheckAuth();
     const changeShowNotification = (value) => {
-        setShowNotification(value)
+        setShowNotification({key: value, text: ''});
     }
-    const [enterCode, setEnterCode] = useState(false);
-    // const handlerClick = () => {
-    //     if(!checkAuthUser()) {
-    //         setShowNotification('authError');
-    //     } else {
-    //         setShowNotification('send');
-    //     }
-    // }
-    const {initialRegisterRequestMutation} = registerRequestService()
+    useEffect(()=>{
+        console.log(Object.keys(errors)[0])
+        const firstError = Object.keys(errors)[0];
+        if(firstError) {
+            console.log(errors[firstError])
+            setShowNotification({key: firstError, text: errors[firstError].message})
+            setFocus(firstError)
+        }
+    },[errors, setFocus])
+    const {initialRegisterRequestMutation, transitionToGatewayMutation} = registerRequestService()
     const onSubmit = (data) => {
         console.log(data)
         initialRegisterRequestMutation.mutate({...data, price: 263000, service: getTypeRequestService()})
-        dispatch(getShowModal({item: 'payment'}));
+        if(checkAuthUser()) {
+            setLoading(true);
+            transitionToGatewayMutation.mutateAsync({amount: 260000, description: getTypeRequest()}).then(res => {
+                setLoading(false);
+                localStorage.removeItem('timeStart')
+            }).catch(err => err);
+        } else {
+            dispatch(getShowModal({item: 'payment'}));
+        }
         console.log({...data, service: getTypeRequestService()})
     }
     return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)} className='w-full flex flex-col gap-5'>
+        <div ref={container} className="w-full h-full flex flex-col gap-1 overflow-y-scroll">
+            <HeaderRequestStatus typeRequest={'مشاوره جدید'} titleRequest={getTypeRequest()} 
+            statusRequest={'در حال انجام'} keyRequest={getKeyRequest()} date={'1404/12/22'} time={'14:45'}/>
+
+            <form onSubmit={handleSubmit(onSubmit)} className='w-full h-[87%] flex flex-col gap-5'>
                 <div className='bg-white w-full h-max rounded-2xl px-1.5 sm:px-4 pb-2'>
-                    <SelectPartBody getAreas={getAreas}/>
+                    <SelectPartBody containerRef={container.current} getAreas={getAreas} register={register('area')}/>
+
                     <Symptoms register={register('explain')} isValid={watch('explain') ? getFieldStateValue('explain') : false} isError={errors?.explain} messageError={errors?.explain?.message}/>
-                    <ChooseInsurance getInsurance={getInsurance}/>
+                    <VoiceRecorder/>
+                    
+                    <ChooseInsurance  getInsurance={getInsurance}/>
                     {errors.insurance && <TextError message={errors.insurance.message}/>}
 
-                    <RequestButton type={'submit'}  text="انتقال به درگاه برای پرداخت هزینه مشاوره پزشک متخصص با 10 % تخفیف 263.000 تومان " 
-                     textSubmitting={'در حال ثبت اطلاعات...'} disable={false}/>
+                    <RequestButton type={'submit'}  text="انتقال به درگاه برای پرداخت هزینه مشاوره پزشک متخصص با 10 % تخفیف 26.000 تومان " 
+                     textSubmitting={'در حال ثبت اطلاعات...'} valid={isValid}/>
                 </div>
             </form>
             {showNotification == 'authError' && <Notification change={() => changeShowNotification('')} 
-            text={'برای ادامه لطفاً وارد حساب کاربری‌ تان شوید'} show={showNotification} bg1={'bg-red-500'} bg2={'bg-red-300'}/>}
-            {showNotification == 'send' && <Notification change={() => changeShowNotification('')} 
-            text={'کد با موفقیت ارسال شد'} show={showNotification} bg1={'bg-green-500'} bg2={'bg-green-300'}/>}
-        </>
+            text={'برای ادامه لطفاً وارد حساب کاربری‌ تان شوید'} show={showNotification} bg1={'bg-red-500'} bg2={'bg-red-300'} color={'text-red-800'}/>}
+            {showNotification.key != '' && <Notification change={() => changeShowNotification('')} 
+                text={showNotification.text} show={showNotification} bor={'border-red-500'} 
+                bg={'bg-[#f3cece]'} color={'text-red-800'}/>}
+            {loading && <LoadingGateway amount={260000}/>}
+        </div>
     )
 }
 

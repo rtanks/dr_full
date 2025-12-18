@@ -1,4 +1,5 @@
-import { IsString , IsOptional, Min, Length} from 'class-validator'
+import { Optional } from '@nestjs/common';
+import { IsString , IsOptional, Length, IsObject} from 'class-validator'
 export class CreateUserDto {
     @IsString()
     fullName: string;
@@ -18,4 +19,8 @@ export class CreateUserDto {
     @IsString()
     @IsOptional()
     city?: string;
+
+    @IsString()
+    @IsOptional()
+    birthday?: string;
 }

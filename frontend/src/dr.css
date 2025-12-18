@@ -1,0 +1,194 @@
+:root {
+      /* --- رنگ‌ها و متغیرهای اصلی (تم سبز تیره) --- */
+      --bg: #f6f8fb;
+      --surface: rgba(255, 255, 255, 0.86);
+      --on-surface: #0f172a;
+      --on-surface-dim: #334155;
+      
+      --primary: #059669;       /* Medium Green (Emerald 600) */
+      --primary-strong: #047857; /* Dark Green (Emerald 700) */
+      --accent: #7c3aed;        /* Purple for Rating */
+      --success: #10b981;       /* Bright Success Green */
+      --muted: #64748b;
+      
+      /* Chip Transparency based on new primary green */
+      --chip-border: rgba(4, 120, 87, 0.35); /* بردر کمی پررنگ‌تر */
+      
+      /* ابعاد و افکت‌ها */
+      --radius-xl: 20px;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --shadow-2: 0 18px 40px rgba(15, 23, 42, 0.12);
+      --avatar-size: 82px; 
+      --gap: 14px;
+      --pad: 18px;
+      
+      --font-sans: "Vazirmatn", Tahoma, "Segoe UI", system-ui, sans-serif;
+    }
+
+    .card {
+      width: min(700px, 92vw);
+      background: var(--surface);
+      backdrop-filter: saturate(140%) blur(10px);
+      -webkit-backdrop-filter: saturate(140%) blur(10px);
+      border: 1px solid rgba(2, 132, 199, 0.12); 
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-2);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* افکت‌های پس‌زمینه کارت (تم سبز) */
+    .card::before {
+      content: ""; position: absolute; inset: -2px; border-radius: inherit; pointer-events: none; z-index: -1;
+      background: conic-gradient(from 180deg at 20% 20%, rgba(5, 150, 105, 0.14), transparent 35%, rgba(124, 58, 237, 0.12), transparent 65%, rgba(5, 150, 105, 0.14));
+      filter: blur(16px); opacity: 0.8;
+    }
+    .card::after {
+      content: ""; position: absolute; inset: -2px; border-radius: inherit; pointer-events: none; z-index: -1;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.35));
+      border: 1px solid rgba(2, 132, 199, 0.10); mix-blend-mode: soft-light;
+    }
+
+    /* --- هدر --- */
+    .card-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto; 
+      gap: var(--gap);
+      align-items: center;
+      padding: 20px var(--pad);
+      border-bottom: 1px solid rgba(2, 132, 199, 0.14);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), transparent 60%);
+    }
+
+    /* --- آواتار --- */
+    .avatar-wrap {
+      position: relative;
+      width: var(--avatar-size);
+      height: var(--avatar-size);
+      flex-shrink: 0;
+    }
+
+    .avatar {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.1);
+      background: #ffffff;
+    }
+
+    /* دکمه وضعیت روی آواتار */
+    .status-toggle {
+      position: absolute; right: 2px; bottom: 2px;
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 3px solid #fff;
+      padding: 0; cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: var(--success); 
+    }
+
+    /* --- مشخصات --- */
+    .identity { display: grid; gap: 6px; }
+    .doctor-name { font-size: 1.28rem; font-weight: 900; color: #0b1324; margin: 0; }
+    .specialty { color: var(--on-surface-dim); font-size: 0.96rem; font-weight: 600; margin: 0; }
+
+    /* --- آمار (کنار هم) --- */
+    .metrics {
+      display: flex;
+      flex-direction: row; 
+      gap: 8px;
+      align-items: center; 
+      align-self: center; 
+      flex-wrap: nowrap;
+    }
+    .metric {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(2, 132, 199, 0.18);
+      color: var(--on-surface);
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      display: grid;
+      grid-template-columns: auto auto; 
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .metric .icon { width: 18px; height: 18px; opacity: 0.9; }
+    .metric .label { font-weight: 800; color: #0c4a6e; }
+    .metric .sub { color: var(--muted); font-weight: 600; font-size: 0.85rem; }
+    .metric[data-type="rating"] .label { color: var(--accent); }
+    .metric[data-type="count"] .label { color: var(--primary-strong); }
+
+    /* --- سرفصل (رنگ سبز تیره) --- */
+    .services-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--primary-strong); /* <-- رنگ سبز تیره جدید */
+        margin: 0 0 8px 0;
+    }
+
+    /* --- آیکون‌های Stroke --- */
+    .chip .chip-icon {
+        width: 18px; height: 18px;
+        fill: none; 
+        stroke: currentColor;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    /* --- دکمه‌های انتخاب مشاوره (استایل جدید/مینیمالیست) --- */
+    .card-body {
+      padding: var(--pad);
+      display: grid;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.85));
+    }
+
+    .services {
+      display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .services::-webkit-scrollbar { display: none; }
+
+    .chip {
+      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 18px; 
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--chip-border); 
+      background: var(--surface); /* زمینه سفید/شفاف */
+      color: var(--primary-strong); /* متن و آیکون سبز تیره */
+      font-weight: 800; 
+      font-size: 0.95rem; 
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* سایه بسیار ملایم */
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .chip:hover { 
+        transform: none; /* حذف افکت پرش */
+        box-shadow: 0 4px 10px rgba(4, 120, 87, 0.1); /* افزایش سایه هنگام هاور */
+        border-color: var(--primary); 
+    }
+    .chip[aria-pressed="true"] {
+      /* حالت انتخاب شده (سبز تیره) - بدون تغییر */
+      background: var(--primary); 
+      color: #fff;
+      border-color: var(--primary-strong);
+      box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
+    }
+    
+    /* --- بهینه‌سازی موبایل --- */
+    @media (max-width: 640px) {
+      .card-header {
+        grid-template-columns: auto 1fr;
+        grid-template-areas: "avatar identity" "metrics metrics";
+      }
+      .avatar-wrap { grid-area: avatar; }
+      .identity { grid-area: identity; }
+      
+      .metrics { 
+          grid-area: metrics; 
+          justify-content: start; 
+          margin-top: 8px; 
+          overflow-x: auto; 
+          flex-wrap: nowrap;
+      }
+    }

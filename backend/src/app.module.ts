@@ -11,6 +11,11 @@ import * as passport from 'passport';
 import { ConfigModule } from '@nestjs/config'
 import { ThrottlerModule } from '@nestjs/throttler';
 import { PaymentModule } from './payment/payment.module';
+import { AdminModule } from './admin/admin.module';
+import { MessageModule } from './message/message.module';
+import { UserMessagesModule } from './user-messages/user-messages.module';
+import { DoctorsModule } from './doctors/doctors.module';
+import { HospitalModule } from './hospital/hospital.module';
 
 @Module({
   imports: [
@@ -24,7 +29,7 @@ import { PaymentModule } from './payment/payment.module';
         }
       ]
     }),
-    UsersModule, RequestsModule, QrModule, AuthModule, PaymentModule
+    UsersModule, RequestsModule, QrModule, AuthModule, PaymentModule, AdminModule, MessageModule, UserMessagesModule, DoctorsModule, HospitalModule
   ],
   controllers: [AppController],
   providers: [AppService],

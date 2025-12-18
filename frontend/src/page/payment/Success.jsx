@@ -8,12 +8,6 @@ import registerRequestService from '../../services/api/registerRequestService'
 export default function Success() {
     const {baseUrl, headers, id:userId} = HeaderAuth()
     const [dataTransaction, setDataTransaction] = useState({})
-    const param = new URLSearchParams(location.search)
-    const id = param.get('id');
-    const {data, isLoading, isSuccess, isPending} = useQuery({queryKey: ['transactionResult'], queryFn: async () => {
-        const response = await axios.get(`${baseUrl}/payment/${id}`, {headers});
-        return response;
-    }})
     useEffect(() => {
         if(!isPending) {
             console.log(data)
@@ -43,15 +37,15 @@ export default function Success() {
                         <span>تاریخ :</span>
                         <span className='w-max flex flex-row gap-2'>
                             <span className='w-max'>
-                                {dataTransaction.time}
+                                {/* {dataTransaction.time} */}
                             </span>
-                            {dataTransaction.date}
+                            {/* {dataTransaction.date} */}
                         </span>
                     </div>
                     <div className='w-full flex flex-row gap-5 justify-between'>
                         کد پیگیری:
                         <span>
-                            {dataTransaction.refId}
+                            {/* {dataTransaction.refId} */}
                         </span>
                     </div>
                 </div>

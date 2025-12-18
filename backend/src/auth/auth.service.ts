@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 // import { CreateAuthDto } from './dto/create-auth.dto';
 // import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UsersService } from 'src/users/users.service';
@@ -12,11 +12,19 @@ export class AuthService {
     private jwtService:JwtService, private otpService: OtpService){}
   
   async register(createUserDto:CreateUserDto) {
-    return await this.userService.register(createUserDto)
+    const user = await this.userService.register(createUserDto)
+    if(!user){
+      throw new BadRequestException('خطا در ایجاد کاربر!')
+    }
+    const accessToken = this.jwtService.sign({
+        sub: user._id,
+        nationalCode: user.nationalCode
+      })
+    return {user, token:{accessToken}}
   }
 
   
-  async login(fullName:string, nationalCode:string, phoneNumber:string) {
+  async loginAndRegister(fullName:string, nationalCode:string, phoneNumber:string) {
     const userExisting = await this.userService.loginAndRegister(fullName, nationalCode, phoneNumber);
     // const otpSend = await this.otpService.generateOtp(phoneNumber);
     // return {userExisting, otpSend};
@@ -27,32 +35,31 @@ export class AuthService {
     return otpSend;
   }
   
-  async verifyOtp(phoneNumber: string, otp: number) {
+  async verifyOtpAndLogin(phoneNumber: string, otp: number) {
     const otpVerify = await this.otpService.verifyOtp(phoneNumber, otp);
     if(otpVerify) {
       const user = await this.userService.findByPhoneNumber(phoneNumber);
-      if(user) {
-        const accessToken = this.jwtService.sign({
-          sub: user._id,
-          nationalCode: user.nationalCode
-        })
-        return {...otpVerify, data: user, token: {accessToken}}
+      if(!user){
+        throw new BadRequestException('کاربر مورد نظر یافت نشد!')
       }
+      const accessToken = this.jwtService.sign({
+        sub: user._id,
+        nationalCode: user.nationalCode
+      })
+      return {...otpVerify, data: user, token: {accessToken}}
     }
-    // return otpVerify;
+    return otpVerify;
+  }
+
+  async loginWithPhoneNumber(phoneNumber:string) {
+    const user = await this.userService.findByPhoneNumber(phoneNumber);
+      if(!user){
+        throw new BadRequestException('کاربر مورد نظر یافت نشد!')
+      }
+      const accessToken = this.jwtService.sign({
+        sub: user._id,
+        nationalCode: user.nationalCode
+      })
+    return {data: user, token: {accessToken}}
   }
 }
-
-// async login(fullName: string, nationalCode:string, phoneNumber: string, otp: number) {
-//   if(otp != 0) {
-//     const user = await this.userService.login(nationalCode, phoneNumber, fullName);
-//     const accessToken = this.jwtService.sign({
-//       sub: user._id,
-//       nationalCode: user.nationalCode
-//     })
-//     return {message: "success", data: user}
-//   } else if(otp == 0) {
-//     const otpCode = await this.otpService.generateOtp(phoneNumber);
-//     return otpCode
-//   }
-// }

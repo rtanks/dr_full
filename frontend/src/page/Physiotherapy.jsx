@@ -1,12 +1,8 @@
 import CompleteOrderStepOne from "../components/request/CompleteOrderStepOne";
-import HeaderRequestStatus from "../components/request/HeaderRequestStatus";
-import { getTypeRequest, getKeyRequest } from "../services/func/getTypeRequest";
 
 export default function Physiotherapy() {
     return (
-        <div className="w-full h-max flex flex-col gap-3">
-            <HeaderRequestStatus typeRequest={'مشاوره جدید'} titleRequest={getTypeRequest()} 
-            statusRequest={'در حال انجام'} keyRequest={getKeyRequest()} date={'1404/12/22'} time={'14:45'}/>
+        <div className="w-full h-full flex flex-col gap-1">
             <CompleteOrderStepOne/>
         </div>
     )

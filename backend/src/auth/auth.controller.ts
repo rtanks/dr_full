@@ -11,10 +11,10 @@ export class AuthController {
     return await this.authService.register(createUserDto);
   }
 
-  @Post('user/login')
-  async login(@Body() body: {fullName: string, nationalCode: string, phoneNumber: string}){
-    return await this.authService.login(body.fullName, body.nationalCode, body.phoneNumber);
-  }
+  // @Post('user/login')
+  // async login(@Body('phoneNumber') phoneNumber:string){
+  //   return await this.authService.login(phoneNumber);
+  // }
 
   @Post('retry-otp')
   async retryOtp(@Body('phoneNumber') phoneNumber:string) {
@@ -23,6 +23,10 @@ export class AuthController {
 
   @Post('verify-otp')
   async verifyOtp(@Body('phoneNumber') phoneNumber:string, @Body('otp') otp:number) {
-    return await this.authService.verifyOtp(phoneNumber, otp);
+    return await this.authService.verifyOtpAndLogin(phoneNumber, otp);
+  }
+  @Post('login/phone-number')
+  async loginWithPhoneNumber(@Body('phoneNumber') phoneNumber:string) {
+    return await this.authService.loginWithPhoneNumber(phoneNumber);
   }
 }

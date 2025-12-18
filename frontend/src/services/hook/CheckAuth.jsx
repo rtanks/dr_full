@@ -17,6 +17,7 @@ export default function CheckAuth() {
         Cookies.remove('id');
         Cookies.remove('tempId');
         // localStorage.removeItem('order');
+        navigate('/')
         location.reload();
     }
 

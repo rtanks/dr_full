@@ -25,8 +25,14 @@ export class Payment {
     @Prop()
     message?: string;
 
+    @Prop()
+    code?: number;
+
     @Prop({default: false})
     payed?: boolean;
+
+    @Prop()
+    verifyAt?: Date;
 }
 export type PaymentDocument = HydratedDocument<Payment>;
 export const PaymentSchema = SchemaFactory.createForClass(Payment);

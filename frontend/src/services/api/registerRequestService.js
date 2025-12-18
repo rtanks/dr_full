@@ -15,7 +15,7 @@ export default function registerRequestService() {
         const response = await axios.post(`${baseUrl}/requests/create-draft`, {tempId , data}, 
             {headers:{'Content-Type': 'application/json'}});
             // syntax post(url, body,{ header})
-        Cookies.set('tempId', tempId, {secure: true});
+        Cookies.set('tempId', tempId);
         return response;
     }
     const initialRegisterRequestMutation = useMutation({
@@ -29,7 +29,8 @@ export default function registerRequestService() {
     });
 
     const transitionToGateway = async ({amount, description}) => {
-        const response = await axios.post(`${baseUrl}/payment/request`, {userId, amount, description}, {headers});
+        console.log(amount, description)
+        const response = await axios.post(`${baseUrl}/payment/request`, {userId, amount: +amount, description}, {headers});
         return response;
     }
     const transitionToGatewayMutation = useMutation({
@@ -53,14 +54,15 @@ export default function registerRequestService() {
     }
     const registerRequestEnd = async (data) => {
         //data => userId, data, statusPayed, transactionId
-        const response = await axios.post(`${baseUrl}/requests/create`, data, {headers});
+        console.log(data)
+        const response = await axios.post(`${baseUrl}/requests/create`, {...data}, {headers});
         return response;
     }
     const registerRequestEndMutation = useMutation({
         mutationFn: registerRequestEnd,
         onSuccess: (res) => {
             console.log(res);
-            navigate("/")
+            navigate(`/request/${res.data._id}`)
         },
         onError: (err) => {
             console.log(err)
