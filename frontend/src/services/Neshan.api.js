@@ -1,9 +1,7 @@
 import axios from "axios";
-// اینو بزار تو  .env خانم سپهوند
-const NESHAN_API_KEY = "service.617082f3ec49406a85ce8cc8f1fd2531";
-
 export const FetchAddressNeshan = async (data) => {
-  // console.log(NESHAN_API_KEY);
+  const NESHAN_API_KEY = "service.69a8e727e6f74d7681c68c0d2160408b";
+  console.log(NESHAN_API_KEY);
 
   try {
     const response = await axios.get(
@@ -12,6 +10,7 @@ export const FetchAddressNeshan = async (data) => {
         headers: { "Api-Key": NESHAN_API_KEY },
       }
     );
+    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Error fetching address:", error);

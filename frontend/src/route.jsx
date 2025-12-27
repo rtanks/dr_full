@@ -25,6 +25,7 @@ import ProtectedRoute from './ProtectedRoute'
 import LoginOwner from './page/LoginOwner'
 import Profile from './page/Profile'
 import { useRef } from 'react'
+import Triage from './page/Triage'
 
 export default function RoutesList() {
     const targetElement = useRef();
@@ -37,6 +38,7 @@ export default function RoutesList() {
                 <Route path='/:reagent?' element={<MainPage/>}>
                     {/* <Route index element={<Navigate to={'mri'} replace/>}/> */}
                     {/* <Route index element={<Home/>}/> */}
+                    <Route path='triage' element={<Triage/>}/>
                     <Route path='visit-doctor' element={<VisitDoctor/>}/>
                     <Route path='mri' index element={<MRI/>}/>
                     <Route path='graph' element={<Graph/>}/>

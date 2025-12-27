@@ -56,6 +56,7 @@ export default function MainPage() {
 };
 
 const handleTouchMove = (e) => {
+  
   const endX = e.touches[0].clientX;
   const endY = e.touches[0].clientY;
   const diffX = endX - startX.current;
@@ -70,6 +71,7 @@ const handleTouchMove = (e) => {
 };
 
 const handleTouchEnd = (e) => {
+  
   const endX = e.changedTouches[0].clientX;
   const endY = e.changedTouches[0].clientY;
 
@@ -101,7 +103,7 @@ const targetComponent = (i) => {
   switch(i) {
       case 1: return <Menu scrollHandler={scrollToSnap} changeActiveSnap={changeActiveSnap}/>;
       case 2: return <EndItem/>;
-      case 3: return <Actions/>
+      case 3: return <Actions scrollHandler={scrollToSnap}/>
     }
   }
 
@@ -144,7 +146,8 @@ const targetComponent = (i) => {
         {/* <div className='w-full h-[83vh] pt-4 px-2 sm:px-0 relative'> */}
         <div className='w-full h-screen pb-16 pt-1 px-0.5 relative'>
           <div
-            ref={container}
+            ref={container} 
+            id='mainScrollContainerMobile'
             className="w-full h-full flex overflow-hidden"
             dir="rtl" // مهم: container راست چین
             onTouchStart={handleTouchStart}
@@ -155,7 +158,7 @@ const targetComponent = (i) => {
               <div 
                   key={i}
                   ref={(el) => {(snapsRef.current[i] = el)}}
-                  className={`shrink-0 ${i == 1? "w-[97%]": "w-[98%]"} h-full rounded-2xl mx-1.5 bg-transparent 
+                  className={`shrink-0 ${i == 1? "w-[97%]": "w-[98%]"} h-full rounded-xl mx-1.5 bg-transparent 
                   flex items-center justify-center gap-1 sm:p-3 overflow-y-scroll`}
                   
                 > 
@@ -170,7 +173,7 @@ const targetComponent = (i) => {
         </>
         ) : (
           <div className='w-full h-full px-1 sm:px-0 relative'>
-           <div dir='rtl' className={`w-full h-full scroll-smooth snap-x snap-mandatory flex flex-row gap-1.5 sm:gap-5 py-2 px-4 sm:p-3 overflow-x-scroll sm:justify-center sm:overflow-x-hidden`}>
+           <div dir='rtl' className={`w-full h-full scroll-smooth snap-x snap-mandatory flex flex-row gap-1.5 sm:gap-5 py-2 px-4 sm:p-3 overflow-x-scroll sm:justify-center  sm:overflow-x-hidden`}>
               <Menu/>
               <EndItem/>
               <Actions/>

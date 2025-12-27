@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-const services = [
+export const services = [
     {key: 'mri', value: 'ثبت ام ار آی', service: 'ام ار آی'},
     {key: 'graph', value: 'ثبت گرافی', service: 'گرافی'},
     {key: 'ct-scan', value: 'ثبت سی تی اسکن', service: 'سی تی اسکن'},
@@ -16,7 +16,8 @@ const services = [
     {key: 'visit-doctor', value: 'ویزیت پزشک', service: 'ویزیت پزشک'},
     {key: 'support', value: 'سوالات متداول / پشتیبانی', service: 'پشتیبانی'},
     {key: '', value: 'سوالات متداول / پشتیبانی', service: 'پشتیبانی'},//this for main page
-    {key: 'profile', value:'پروفایل', service:'پروفایل'}
+    {key: 'profile', value:'پروفایل', service:'پروفایل'},
+    {key: 'triage', value:'تریاژ (تشخیص و مشاوره)', service:'تریاژ (تشخیص و مشاوره)'},
 ];
 export function getTypeRequest() {
     const pathName = window.location.pathname.slice(1);
@@ -50,7 +51,8 @@ export const getCategory = (service) => {
         case 'گرافی': 
         case 'ام ار آی': 
         case 'فیزیوتراپی': 
-        return 'paraClinic';
+        case 'تریاژ (تشخیص و مشاوره)':
+            return 'paraClinic';
 
         case 'ویزیت دکتر': return 'doctorConsulting'
 
@@ -64,8 +66,9 @@ export const getCategory = (service) => {
     }
 }
 export const getNavBarText = () => {
-    const params = useParams();
-    const pathName = params.id ? window.location.pathname.replace('/' + params.id, '').slice(1) :window.location.pathname.slice(1);
+    const params = new URLSearchParams(location.search);
+    console.log(location.pathname.split('/')[1])
+    const pathName = params.get('id') ? location.pathname.split('/')[1] :window.location.pathname.slice(1);
     const targetKey = services.find(item => item.key == pathName);
     const service = targetKey? targetKey.service : "";
     switch(service) {
@@ -79,7 +82,8 @@ export const getNavBarText = () => {
         case 'آزمایش':
         case 'حمل و نقل':
         case 'ویزیت پزشک':
-            return {name:'در حال انجام', key: 'other'};
+        case 'تریاژ (تشخیص و مشاوره)':
+            return {name:'درحال انجام', key: 'other'};
 
         case "پشتیبانی": return {name:'پشتیبانی', key: 'support'};
         case "درباره ما": return {name:'درباره ما', key: 'about'};
@@ -93,10 +97,10 @@ export const getNavBarText = () => {
 export const checkExistRequestId = () => {
     const pathName = window.location.pathname.split('/')
     console.log(pathName)
-    if(pathName[2]) {
-        return true;
+    if(pathName[2] && pathName[1] == 'request') {
+        return pathName[2];
     } else {
-        return false;
+        return undefined;
     }
 }
 
@@ -109,3 +113,13 @@ export const getReagentCode = () => {
         return ''
     }
 }
+export const serviceList = [
+    {key: 'mri', value: 'ثبت ام ار آی', service: 'ام ار آی'},
+    {key: 'graph', value: 'ثبت گرافی', service: 'گرافی'},
+    {key: 'ct-scan', value: 'ثبت سی تی اسکن', service: 'سی تی اسکن'},
+    {key: 'ultrasound', value: 'ثبت سونوگرافی', service: 'سونوگرافی'},
+    {key: 'strip-test', value: 'ثبت تست نواری', service: 'تست نواری'},
+    {key: 'physiotherapy', value: 'ثبت فیزیوتراپی', service: 'فیزیوتراپی'},
+    {key: 'test', value: 'ثبت آزمایش', service: 'آزمایش'},
+    {key: 'medicine', value: 'ثبت دارو', service: 'دارو'},
+];

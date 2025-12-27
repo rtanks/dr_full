@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import HeaderAuth from "../../services/api/headerAndUrlService.js";
 import doctorManagementService from "../../services/api/doctorManagementService.js";
@@ -7,12 +7,16 @@ import doctorManagementService from "../../services/api/doctorManagementService.
 export default function SearchDoctor({children, onClick1, onClick2}) {
     const {baseUrl, headers} = HeaderAuth()
     const [users, setUsers] = useState([]);
+    const [show, setShow] = useState(false);
     const [error, setError] = useState(null)
+    const inp = useRef()
+    const [doctorSelected, setDoctorSelected] = useState({})
     const searchValue = (e) => {
         const searchVal = e.target.value;
         if(!(searchVal == '' || searchVal == null)) {
             axios.get(`${baseUrl}/doctors/search/doctor/${e.target.value}/`, {headers}).then( res => {
                 console.log('fullName',res.data)
+                setShow(true)
                 setUsers(res.data);
                 setError(null)
             }).catch(err => {
@@ -30,17 +34,19 @@ export default function SearchDoctor({children, onClick1, onClick2}) {
     return (
         <div className="mb-[15px] flex flex-col gap-1 relative">
             <div className="flex gap-2.5">
-              <input type="text" onChange={(e) => {searchValue(e)}}
+              <input type="text" ref={inp} onChange={(e) => {searchValue(e)}}
                id="newDoctorName" placeholder="نام پزشک جدید" style={{flex:1}}/>
-              <button className="btn primary h-10 py-1.5 px-2.5 font-old" id="addDoctorBtn">+ افزودن</button>
+              <button type="button" onClick={() => {addDoctor(doctorSelected._id);inp.current.value = "";}} className="btn primary h-10 py-1.5 px-2.5 font-old" id="addDoctorBtn">افزودن به لیست</button>
             </div>
-            <div className="w-[81.78%] h-max absolute right-[0.5px] top-[80%] rounded-b-xl bg-white">
+            <div className={`w-[73%] h-max ${show ? 'block' : "hidden"} absolute right-[0.5px] top-[80%] rounded-b-xl bg-white`}>
+                            {/* <div onClick={() => addDoctor(user._id)} key={user._id} className="p-2 shadow-sm">{user.fullName}</div> */}
                 {
                     users.length == 0 ? (
                         ""
                     ) : (
                         users.map(user => (
-                            <div onClick={() => addDoctor(user._id)} key={user._id} className="p-2 shadow-sm">{user.fullName}</div>
+                            <div onClick={() => {setDoctorSelected(user);inp.current.value = user.fullName;setShow(false)}} 
+                            key={user._id} className="p-2 shadow-sm ">{user.fullName}</div>
                         ))
                     )
                 }

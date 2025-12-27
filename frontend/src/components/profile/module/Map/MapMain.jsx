@@ -8,6 +8,7 @@ import { userIcon } from "./MapIcons";
 import Bg_Modal from "../BgModal";
 import { FaHome } from "react-icons/fa";
 import HomeMarker from "./HomeMarker";
+import myLocation from '../../../../assets/icons/myLocation.png'
 
 const MAP = ({
   data = null,
@@ -121,6 +122,7 @@ const MAP = ({
       >
         <FaLocationCrosshairs className="text-xl text" />
       </span>
+      
     </div>
   );
 };

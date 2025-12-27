@@ -3,10 +3,10 @@ import MedicineItem from "./MedicineItem";
 
 export default function AddMedicineH({medicineSelected, getMedicineSelected}) {
     const presets = [
-        {id: 'medicine_cxy-23',name:'سفالکسین', doseArray:[500,250], dose: '500 میلی گرم', count:40, freq: "4 — چهار بار در روز"},
-        {id: 'medicine_cxy-24',name:'سیپروفلوکساسین', doseArray:[500,250], dose: '500 میلی گرم', count:30, freq: "2 — دو بار در روز"},
-        {id: 'medicine_cxy-4',name:'ناپروکسن', doseArray:[500], dose: '500 میلی گرم', count:30, freq: "2 — دو بار در روز"},
-        {id: 'medicine_cxy-83',name:'آمپول پیروکسیکام 20mg', doseArray:[20], dose: '20 میلی گرم', count:3, freq: "0.5 — یک روز در میان"}
+        {id: 'medicine_cxy-23',name:'سفالکسین', doseArray:[500,250], dose: '500 میلی گرم', count:40, freq: 4},
+        {id: 'medicine_cxy-24',name:'سیپروفلوکساسین', doseArray:[500,250], dose: '500 میلی گرم', count:30, freq: 2},
+        {id: 'medicine_cxy-4',name:'ناپروکسن', doseArray:[500], dose: '500 میلی گرم', count:30, freq: 2},
+        {id: 'medicine_cxy-83',name:'آمپول پیروکسیکام', doseArray:[20], dose: '20 میلی گرم', count:3, freq: 0.5}
     ];
     const generateId = () => {
         const randomNum = Math.random() * 100
@@ -17,8 +17,8 @@ export default function AddMedicineH({medicineSelected, getMedicineSelected}) {
         getMedicineSelected([...medicineSelected, doseArray? {id,name, dose, count, freq, doseArray}: {id, name, dose, count, freq}]);
     }
     const addMedicineNew = () => {
-        console.log([...medicineSelected, {id: generateId(), name: '', dose: '', count: 1, freq: '1 — یک‌بار در روز'}])
-        getMedicineSelected([...medicineSelected, {id: generateId(), name: '', dose: '', count: 1, freq: '1 — یک‌بار در روز'}]);
+        console.log([...medicineSelected, {id: generateId(), name: '', dose: '', count: 1, freq: 1}])
+        getMedicineSelected([...medicineSelected, {id: generateId(), name: '', dose: '', count: 1, freq: 1}]);
     }
     const onChangeValues = (id, key, value) => {
         getMedicineSelected(medicineSelected.map(item => id == item.id ? (

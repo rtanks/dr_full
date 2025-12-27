@@ -23,11 +23,11 @@ export default function HeaderRequestStatus({typeRequest, titleRequest, keyReque
     const statusServiceClass = classNames({
         'text-failed': 'پرداخت نشده' == statusRequest,
         'text-select': 'پرداخت شده' == statusRequest,
-        'text-main': 'در حال انجام' == statusRequest,
+        'text-main': 'درحال انجام' == statusRequest,
     })
     return (
-        <div className="w-full h-[11.5vh] sm:h-[12%] bg-white rounded-2xl border-2 border-main mb-1 flex flex-row justify-between items-center px-2 py-[20px] sm:px-3">
-            <div className="w-max h-max flex flex-row items-center gap-3">
+        <div className="w-full h-[12.5%] sm:h-[12%] bg-white rounded-xl border-2 border-main mb-1 flex flex-row justify-between items-center px-1 py-[20px] sm:px-3">
+            <div className="w-[66%] sm:w-max h-max flex flex-row items-center gap-3 bg-white">
                 <div className='w-12 h-12 rounded-xl bg-white border border-gray-400 flex justify-center items-center text-2xl'>
                     {
                         getIconForHeader(24, '#676767', keyRequest)
@@ -35,11 +35,11 @@ export default function HeaderRequestStatus({typeRequest, titleRequest, keyReque
                 </div>
                 {/* <IoAlertCircleOutline size={24} className='text-757575'/> */}
                 <div className='w-max h-max flex gap-1 flex-col'>
-                    <span className='text-md font-bold'>{typeRequest}</span>
-                    <span className='text-sm text-676767 font-bold'>{titleRequest}</span>
+                    <span className='sm:text-md font-bold'>{typeRequest}</span>
+                    <span className='w-full h-max line-clamp-1 text-sm text-676767 font-bold'>{titleRequest}</span>
                 </div>
             </div>
-            <div className="w-max h-max flex flex-col gap-2">
+            <div className="w-max sm:w-max h-max flex flex-col gap-2">
                 <span className={`${statusServiceClass} text-md text-left font-bold pl-1`}>{statusRequest}</span>
                 <div className='w-max flex flex-col sm:flex-row gap-1 items-end text-898989 text-xs'>
                     {/* <span>ایجاد شده در </span> */}

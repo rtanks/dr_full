@@ -35,9 +35,14 @@ export class HospitalService {
     const doctorsWithName = await Promise.all(
       doctors.map(async (doctor) => {
         const dr = await this.doctorsService.findDoctorById(String(doctor.doctorId));
-        return {id: dr?._id, fullName: dr?.fullName, activate: doctor.activate}
+        return {hospitalId: doctor._id, id: dr?._id, fullName: dr?.fullName, activate: doctor.activate}
       })
     )
     return doctorsWithName;
+  }
+
+  async deleteDoctor(id:string) {
+    const doctor = await this.hospitalModel.findByIdAndDelete(id);
+    return doctor;
   }
 }

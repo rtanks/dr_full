@@ -44,6 +44,7 @@ export default function UserDoctorEdit({doctor, onClick}) {
             specialty: doctor.specialty || "",
             province: doctor.province || "",
             lastUniversity: doctor.lastUniversity || "",
+            lastGraduationYear: doctor.lastGraduationYear || "",
             city: doctor.city || "",
             aboutMe: doctor.aboutMe || ""
         }

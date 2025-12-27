@@ -8,26 +8,28 @@ async function bootstrap() {
   dotenv.config()
 
   
-  const key = fs.readFileSync('localhost+1-key.pem');
-  const cert = fs.readFileSync('localhost+1.pem');
+  // const key = fs.readFileSync('localhost+1-key.pem');
+  // const cert = fs.readFileSync('localhost+1.pem');
   const app = await NestFactory.create(AppModule, 
-    {
-    httpsOptions: {
-      key ,
-      cert 
-    }
-  }
+  //   {
+  //   httpsOptions: {
+  //     key ,
+  //     cert 
+  //   }
+  // }
 );
 
   app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, transform: true }),
+    new ValidationPipe({ whitelist: true, transform: true ,transformOptions: {
+    enableImplicitConversion: false,
+  },}),
   );
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
   app.enableCors({
     origin: '*',
     methods: 'GET,POST,OPTIONS,PUT,PATCH,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Authorization, Accept',
-    credentials: false,
+    // credentials: false,
     // origin: true,
     // credentials: true
   });

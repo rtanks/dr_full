@@ -8,7 +8,8 @@ export default function loginService () {
     const {baseUrl, headers} = HeaderAuth();
     const loginDoctor = async ({nationalCode, password}) => {
             console.log(nationalCode, password)
-            const response = await axios.post(`${baseUrl}/doctors/login/`,
+            // const response = await axios.post(`${baseUrl}/doctors/login/`,
+            const response = await axios.post(`${baseUrl}/admin/login/`,
                 {nationalCode: nationalCode, password: password}, {headers});
             return response;
         }

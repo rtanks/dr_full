@@ -7,27 +7,23 @@ import {v4 as uuidV4} from 'uuid'
 import { data, useNavigate } from "react-router-dom";
 
 export default function registerRequestService() {
-    const {headers, baseUrl, id:userId} = HeaderAuth();
+    const {headers, baseUrl, id:userId, requestId} = HeaderAuth();
     const navigate = useNavigate()
-    const tempId = uuidV4();
     const initialRegisterRequest = async (data) => {
-        console.log({tempId , data})
-        const response = await axios.post(`${baseUrl}/requests/create-draft`, {tempId , data}, 
-            {headers:{'Content-Type': 'application/json'}});
-            // syntax post(url, body,{ header})
-        Cookies.set('tempId', tempId);
+        const response = await axios.post(`${baseUrl}/requests/create/`,data, {headers});
         return response;
     }
     const initialRegisterRequestMutation = useMutation({
         mutationFn: initialRegisterRequest,
         onSuccess: (res) => {
             console.log(res);
+            Cookies.set('requestId', res.data._id);
         },
         onError: (err) => {
             console.log(err)
         }
     });
-
+    
     const transitionToGateway = async ({amount, description}) => {
         console.log(amount, description)
         const response = await axios.post(`${baseUrl}/payment/request`, {userId, amount: +amount, description}, {headers});
@@ -43,7 +39,7 @@ export default function registerRequestService() {
             console.log(err);
         }
     })
-
+    
     const getDataRequestFromDraft = async () => {
         const tempId = Cookies.get('tempId');
         if(tempId) {
@@ -53,25 +49,31 @@ export default function registerRequestService() {
         }
     }
     const registerRequestEnd = async (data) => {
-        //data => userId, data, statusPayed, transactionId
-        console.log(data)
-        const response = await axios.post(`${baseUrl}/requests/create`, {...data}, {headers});
+        //data => statusPayed, transactionId
+        const response = await axios.patch(`${baseUrl}/requests/update/transaction/${requestId}/`, data, {headers});
         return response;
     }
     const registerRequestEndMutation = useMutation({
         mutationFn: registerRequestEnd,
         onSuccess: (res) => {
             console.log(res);
-            navigate(`/request/${res.data._id}`)
+            navigate(`/request/?id=${res.data._id}&&category=${res.data.category}`)
         },
         onError: (err) => {
             console.log(err)
         }
     })
-
+    
     return {initialRegisterRequestMutation, 
         transitionToGatewayMutation,
         getDataRequestFromDraft,
         registerRequestEndMutation
     }
 }
+        // const tempId = uuidV4();
+        //this part for draft
+        // console.log({tempId , data})
+        // const response = await axios.post(`${baseUrl}/requests/create-draft`, {tempId , data}, 
+        //     {headers:{'Content-Type': 'application/json'}});
+        //     // syntax post(url, body,{ header})
+        // Cookies.set('tempId', tempId);

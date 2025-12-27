@@ -10,10 +10,10 @@ export default function loginService () {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {baseUrl, headers} = headersAndUrlBaseService();
-    const loginAdmin = async ({phoneNumber, password}) => {
-            console.log(phoneNumber, password)
+    const loginAdmin = async ({nationalCode, password}) => {
+            console.log(nationalCode, password)
             const response = await axios.post(`${baseUrl}/admin/login/`,
-                {phoneNumber: phoneNumber, password: password}, {headers});
+                {nationalCode: nationalCode, password: password}, {headers});
             return response;
         }
     const loginAdminMutation  = useMutation({

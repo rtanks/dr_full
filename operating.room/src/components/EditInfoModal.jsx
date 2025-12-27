@@ -7,8 +7,10 @@ import SetCities from '../components/general/SetCity'
 import SetProvinces from '../components/general/SetProvinces'
 import { useState } from "react";
 import { provinces } from "../constant/city&province";
+import Notification from "./general/Notification";
+
 export default function RegisterInfoModal({close, initialData}) {
-    const [modal, setModal] = useState(false);
+    const [notification, setNotification] = useState(false);
     const [province, setProvince] = useState(() => {
       if(initialData.user.province) {
         return provinces.find(p => p.name == initialData.user.province)
@@ -36,14 +38,20 @@ export default function RegisterInfoModal({close, initialData}) {
     const {updateRequestAllDataMutation} = registerRequestService()
     const onSubmit = (data) => {
         console.log("data", data)
-        updateRequestAllDataMutation.mutate({
-          id: initialData.user._id,
-          user: {fullName: data.fullName, nationalCode: data.nationalCode, 
-            phoneNumber: data.phoneNumber, province: data.province, city: data.city, birthday: data.birthday}, 
-          requestId: initialData.request._id,
-          request:{service: 'ویزیت پزشک', doctor: initialData.request.request.doctor, type: 'recovery', 
-            medicine: medicineSelected.filter(item => item.name != ''), dateRefer: data.dateRefer,
-            explain: data.explain}})
+        if(medicineSelected.filter(item => item.name == '').length != 0) {
+          console.log(medicineSelected.filter(item => item.name == '').length != 0)
+          setNotification(true);
+          return;
+        } else {
+          updateRequestAllDataMutation.mutate({
+            id: initialData.user._id,
+            user: {fullName: data.fullName, nationalCode: data.nationalCode, 
+              phoneNumber: data.phoneNumber, province: data.province, city: data.city, birthday: data.birthday}, 
+            requestId: initialData.request._id,
+            request:{service: 'ویزیت پزشک', doctor: initialData.request.request.doctor, type:'free',
+              medicine: medicineSelected.filter(item => item.name != ''), dateRefer: data.dateRefer,
+              explain: data.explain}})
+        }
     }
     return (
         <div onClick={close} className="w-full h-full flex justify-center absolute left-0 top-0 bg-[#0009] z-50">
@@ -55,8 +63,9 @@ export default function RegisterInfoModal({close, initialData}) {
                         <div style={{gridColumn:"1 / -1"}}>
                           <div className="row-three">
                             <div>
-                                <label>نام و نام خانوادگی</label>
-                                <input {...register("fullName")} defaultValue={initialData.user.fullName} type="text" id="fullName" placeholder="مثال: علی رضایی" />
+                                <label>کد ملی</label>
+                                <input {...register("nationalCode")} defaultValue={initialData.user.nationalCode} type="text" maxLength={10} id="nationalId" 
+                                    placeholder="کد ملی" inputMode="numeric" pattern="[0-9]*" />
                             </div>
                             <div>
                                 <label>شماره تماس</label>
@@ -64,9 +73,8 @@ export default function RegisterInfoModal({close, initialData}) {
                                     placeholder="09xxxxxxxx" inputMode="numeric" pattern="[0-9]*" />
                             </div>
                             <div>
-                                <label>کد ملی</label>
-                                <input {...register("nationalCode")} defaultValue={initialData.user.nationalCode} type="text" maxLength={10} id="nationalId" 
-                                    placeholder="کد ملی" inputMode="numeric" pattern="[0-9]*" />
+                                <label>نام و نام خانوادگی</label>
+                                <input {...register("fullName")} defaultValue={initialData.user.fullName} type="text" id="fullName" placeholder="مثال: علی رضایی" />
                             </div>
                             <div>
                                 <SetProvinces setData={getValue} setProvince={setProvince}
@@ -105,6 +113,10 @@ export default function RegisterInfoModal({close, initialData}) {
                     </div>
                 </form>
             </div>
+            {notification && <Notification text={'لطفا فیلد های مرتبط با داروی  افزوده شده را پر کنید'}
+                show={notification} change={() => setNotification(false)} bor={"border-red-500"}
+                color={"text-red-500"} bg={"bg-red-200"}
+              />}
         </div>
     )
 }

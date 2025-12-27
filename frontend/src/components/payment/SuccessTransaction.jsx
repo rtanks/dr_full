@@ -6,13 +6,11 @@ import registerRequestService from "../../services/api/registerRequestService";
 import { getCategory } from "../../services/func/getTypeRequest";
 
 export default function SuccessTransAction({data, userId, amount}) {
-    const {registerRequestEndMutation,getDataRequestFromDraft} = registerRequestService();
-    const onClickHandler =  async () => {
-        await getDataRequestFromDraft().then(res => {
-            console.log({userId, category: res.data.service,data: res.data, statusPay: data.payed, transactionId: data.id})
-            const dataRequest = {userId, category: getCategory(res.data.service), request: res.data, statusPay: data.payed, transactionId: data.id}
-            registerRequestEndMutation.mutate(dataRequest)
-        });
+    const {registerRequestEndMutation} = registerRequestService();
+    const onClickHandler = () => {
+      console.log({statusPay: data.payed ? 'success' : 'failed', transactionId: data.id})
+      const dataRequest = {transactionId: data.id, statusPay: data.payed ? 'success' : 'failed'}
+      registerRequestEndMutation.mutate(dataRequest)
     }
     return (
         <>

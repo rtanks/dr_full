@@ -9,7 +9,13 @@ const SetCities = ({ setData, data, province, alert, style, disabled = false }) 
   const [modal, setModal] = useState(false);
   const [city, setCity] = useState(data || "خرم آباد")
   const [cities, setCities] = useState([]);
-
+  useEffect(() => {
+    if(data) {
+      setCity(data)
+    } else {
+      setCity("خرم آباد")
+    }
+  },[data])
   useEffect(() => {
     !!province && setStateClickHadneler(province?.id, setCities);
   }, [province]);

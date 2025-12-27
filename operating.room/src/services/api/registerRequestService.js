@@ -26,13 +26,14 @@ export default function registerRequestService() {
     })
     //---------------Update Request----------------------
     const updateRequest = async ({id, data}) => {
-        const response = await axios.patch(`${baseUrl}/requests/update/${id}/`, {...data}, {headers})
+        const response = await axios.patch(`${baseUrl}/requests/update/hospital/${id}/`, {...data}, {headers})
         return response;
     }
     const updateRequestMutation = useMutation({
         mutationFn: updateRequest,
         onSuccess: (res) => {
             console.log(res);
+            // location.reload();
         },
         onError: (err) => {
             console.log(err)
@@ -85,10 +86,22 @@ export default function registerRequestService() {
             console.log(err)
         }
     })
-
-
-
+    //----send sms----------------------------------------------
+    const sendSmsToUser = async (data) => {
+        const response = await axios.post(`${baseUrl}/message/hospital/patient/`, data, {headers});
+        return response;
+    }
+    const sendSmsToUserMutation = useMutation({
+        mutationFn: sendSmsToUser,
+        onSuccess: (res) => {
+            console.log(res);
+            location.reload();
+        },
+        onError: (err) => {
+            console.log(err);
+        }
+    })
     return {createRequestMutation, updateRequestMutation, 
         updateRequestAllDataMutation, updateRequestTypeMutation, 
-        removeRequestMutation}
+        removeRequestMutation, sendSmsToUserMutation}
 }

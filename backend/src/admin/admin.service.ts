@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 export class AdminService {
   constructor(@InjectModel(Admin.name) private adminModel:Model<Admin>){}
   async login(createAdminDto:CreateAdminDto) {
-    const admin = await this.adminModel.findOne({phoneNumber: createAdminDto.phoneNumber});
+    const admin = await this.adminModel.findOne({nationalCode: createAdminDto.nationalCode});
     if(!admin) {
       throw new BadRequestException('کاربر مورد نظر یافت نشد!')
     }

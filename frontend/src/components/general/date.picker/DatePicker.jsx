@@ -29,8 +29,8 @@ export default function DatePicker({getDate, close, initialDate}) {
         }
     }, [])
     return (
-        <div onClick={() => close()} className="w-full h-screen flex flex-col fixed z-50 left-0 top-0 items-center justify-center bg-[#0007] px-5">
-            <div onClick={(e) => e.stopPropagation()} className="w-[100%] sm:w-[28%] h-[75%] bg-white rounded-xl flex flex-col gap-3 px-5 py-3">
+        <div onClick={() => close()} className="w-full h-full flex flex-col fixed z-50 left-0 top-0 items-center justify-center bg-[#0007] px-5">
+            <div onClick={(e) => e.stopPropagation()} className="w-[100%] sm:w-[28%] h-[460px] sm:h-[75%] bg-white rounded-xl flex flex-col gap-3 px-5 py-3">
                 <div className="w-full h-max text-black text-lg font-bold mt-5">انتخاب تاریخ</div>
                 <div className="w-full h-[73%] bg-white rounded-xl flex flex-row relative">
                     <div className="w-[92%] border h-[15%] bg-gray-100 absolute left-[4%] top-[42%] rounded-xl z-0"></div>
@@ -44,7 +44,7 @@ export default function DatePicker({getDate, close, initialDate}) {
                     <PartOfDate items={getYears()} initialIndex={initial.year} getValue={getYear}/>
                         
                 </div>
-                <div className="w-full h-[15%] flex justify-center items-center">
+                <div className="w-full h-12 sm:h-[15%] flex justify-center items-center">
                     <button onClick={() => {console.log(`${year}/${month}/${day}`);getDate(`${year}/${month}/${day}`);close();}} className="text-white font-bold bg-main rounded-xl w-full h-[85%] flex flex-row items-center justify-center gap-1">
                         <span> تایید تاریخ</span>
                         <span>{`${transformFormat(day)} / ${transformFormat(month)} / ${transformFormat(year)} `}</span>

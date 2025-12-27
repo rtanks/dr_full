@@ -9,7 +9,7 @@ export default function Profile() {
             <HeaderTabMenu text={'تکمیل نشده'} 
             titleRequest={getTypeRequest()} keyRequest={getKeyRequest()}/>
     
-            <div className="w-full h-[87%] bg-white rounded-2xl py-3 px-5 flex flex-col gap-2 overflow-y-scroll">
+            <div className="w-full h-[87%] bg-white rounded-2xl py-3 px-3 sm:px-5 flex flex-col gap-2 overflow-y-scroll">
                 <AddAdPage/>
             </div>
         </div>

@@ -7,7 +7,7 @@ export default function ProfileMenuContainer() {
     const { checkAuthUser } = CheckAuth()
     
     return (
-        <div className="w-full h-[12%] px-3">
+        <div className="w-full h-16 sm:h-[12%] px-3">
             {
                 checkAuthUser() ? (
                     <ProfileMeu/>

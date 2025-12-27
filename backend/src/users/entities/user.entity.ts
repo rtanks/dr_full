@@ -12,13 +12,16 @@ export class User {
     @Prop()
     phoneNumber: string;
 
+    @Prop()
+    profileImage: string;
+
     @Prop({default: ''})
     province?: string;
 
     @Prop({default: ''})
     city?: string;
 
-    @Prop()
+    @Prop({default: ''})
     birthday?: string;
 
     @Prop({type: Object})

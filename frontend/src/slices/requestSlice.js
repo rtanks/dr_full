@@ -10,6 +10,7 @@ const getValuesLocal = () => {
             fullName: '',
             nationalCode: '',
             phoneNumber: '',
+            profileImage: '',
             insurance:'آزاد',
             province: '',
             city: '',
@@ -36,6 +37,7 @@ export const RequestSlice = createSlice({
             state.fullName = action.payload.fullName;
             state.nationalCode = action.payload.nationalCode;
             state.phoneNumber = action.payload.phoneNumber;
+            state.profileImage = action.payload.profileImage;
             state.birthday = action.payload.birthday;
             state.city = action.payload.city;
             state.province = action.payload.province;

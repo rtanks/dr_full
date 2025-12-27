@@ -3,7 +3,7 @@ import { IsString } from "class-validator";
 
 export class CreateAdminDto {
     @IsString()
-    phoneNumber: string;
+    nationalCode: string;
 
     @IsString()
     password: string;

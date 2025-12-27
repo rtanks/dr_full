@@ -15,11 +15,10 @@ export default function Home2() {
     const {baseUrl, headers} = HeaderAuth()
     const dispatch = useDispatch();
     const [dataUserEdit, setDataUserEdit] = useState({})
-    const [doctors, setDoctors] = useState([]);
     const [doctorsFilter, setDoctorsFilter] = useState([]);
-    const getDoctorFilter = (val) => {
-        setDoctorsFilter(val);
-    }
+    const [doctors, setDoctors] = useState([]);
+    const getDoctorFilter = (val) => { setDoctorsFilter(val); }
+
     const getDataUserEdit = (data) => {
         console.log('edit', data)
         setDataUserEdit(data);
@@ -42,9 +41,13 @@ export default function Home2() {
     useEffect(() => {
         if(!isPending) {
             console.log(data.data)
-            console.log(["",...data.data.filter( item => item.activate == true).map(item => item.fullName)])
             setDoctors(data.data);
-            setDoctorsFilter(["",...data.data.filter( item => item.activate == true).map(item => item.fullName)])
+            if(data.data == []) {
+                setDoctorsFilter([""])
+            } else {
+                console.log(["",...data.data.filter( item => item.activate == true).map(item => item.fullName)])
+                setDoctorsFilter(["",...data.data.filter( item => item.activate == true).map(item => item.fullName)])
+            }
         }
     }, [data])
     const showModalFun = () => {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Res, Req, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
@@ -7,12 +7,19 @@ import type { Response } from 'express';
 import { QrService } from 'src/qr/qr.service';
 import { CreateRequestDto } from 'src/requests/dto/create-request.dto';
 import path from 'path';
+import {FileInterceptor} from '@nestjs/platform-express'
+import { memoryStorage } from 'multer';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService, private qrService:QrService) {}
 
-  
+  @Post('profile-image')
+  @UseInterceptors(FileInterceptor('file', {limits:{fileSize: 2 * 1024 * 1024}, storage: memoryStorage()}))
+  async uploadProfileImage(@Body('userId') userId:string ,@UploadedFile() file: Express.Multer.File) {
+    console.log(file)
+    return await this.usersService.uploadProfileImage(userId,file); 
+  }
   @Post("/register")
   async register(@Body() createUserDto:CreateUserDto) {
     return await this.usersService.register(createUserDto);
@@ -27,8 +34,22 @@ export class UsersController {
   }
 
   @Get('admin/users/search')
+  async searchUserAdmin(@Query('key') key:string, @Query('value') value:string){
+    return await this.usersService.searchUser(key, value);
+  }
+  @Get('/search')
   async searchUser(@Query('key') key:string, @Query('value') value:string){
     return await this.usersService.searchUser(key, value);
+  }
+  @Get('/search/limit')
+  async searchUserWithLimit(@Query('key') key:string, @Query('value') value:string, @Query('limit') limit:number){
+    return await this.usersService.searchUserWithLimit(key, value, limit);
+  }
+  @Get('/search/with-cp')
+  @UseGuards(JwtAuthGuard)
+  async searchUserWithCp(@Query('key') key:string, @Query('value') value:string
+  , @Query('province') province:string, @Query('city') city:string){
+    return await this.usersService.searchUserWithCityAndProvince(key, value, province, city);
   }
   @Get()
   async users() {
@@ -65,6 +86,7 @@ export class UsersController {
   @Body('requestId') requestId:string ,@Body('request') request:any) {
     return await this.usersService.updateUserAndRequest(id, user, requestId, request)
   }
+
 
   @Delete('/delete-user/:id')
   async remove(@Param('id') id: string) {

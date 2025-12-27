@@ -14,8 +14,8 @@ import NoRequest from "../general/NoRequest";
 export default function HistoryParaClinic ({history}) {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const clickHandler = (idHistory) => {
-        navigate(`/request/${idHistory}`)
+    const clickHandler = (idHistory, category) => {
+        navigate(`/request/?id=${idHistory}&category=${category}`)
         queryClient.invalidateQueries({queryKey:['history']})
     }
     return (
@@ -27,7 +27,7 @@ export default function HistoryParaClinic ({history}) {
                     <>
                         {
                             history.map(historyItem => (
-                                <HistoryItem key={historyItem._id} id={historyItem._id} onClick={() => clickHandler(historyItem._id)} 
+                                <HistoryItem key={historyItem._id} id={historyItem._id} onClick={() => {clickHandler(historyItem._id, historyItem.category);location.reload()}} 
                                 date={historyItem.createdAt} service={historyItem.request.service} payed={historyItem.statusPay}/>
                             ))
                         }

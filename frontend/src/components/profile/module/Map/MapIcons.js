@@ -12,7 +12,7 @@ export const userIcon = new Icon({
 
 export const ShopIcon = new Icon({
   iconUrl: location,
-  iconSize: [25, 25],
+  iconSize: [25, 35],
   iconAnchor: [10, 35],
   popupAnchor: [0, -38],
 });

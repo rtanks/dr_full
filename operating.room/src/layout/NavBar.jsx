@@ -65,7 +65,7 @@ export default function NavBar() {
           <div className="header-right">
             <button id="manageDoctorsBtn" onClick={() =>{ dispatch(getShowModal({item: 'managementDoctors'})); console.log('hello')}} className="btn big font-bold" title="افزودن، حذف یا جابجایی پزشکان/ستون‌ها">مدیریت پزشکان</button>
             
-            <button id="printBtn" className="btn primary big" title="چاپ جزئیات بیمار انتخاب‌شده">چاپ بیمار</button>
+            {/* <button id="printBtn" className="btn primary big" title="چاپ جزئیات بیمار انتخاب‌شده">چاپ بیمار</button> */}
             
             <button onClick={() =>{ dispatch(getShowModal({item: 'registerInfo'})); console.log('hello')}} id="createBtn" className="btn primary big">ایجاد بیمار جدید</button>
             

@@ -9,14 +9,13 @@ import { getCategory } from "../../services/func/getTypeRequest";
 
 export default function FailedTransAction({data, amount, userId}) {
     const [loading, setLoading] = useState(false);
-    const {registerRequestEndMutation,getDataRequestFromDraft, transitionToGatewayMutation} = registerRequestService();
-    const onClickHandler =  async () => {
-        await getDataRequestFromDraft().then(res => {
-            console.log({userId, data: res.data, statusPay: data.payed, transactionId: data.id})
-            const dataRequest = {userId, category: getCategory(res.data.service), request: res.data, statusPay: data.payed, transactionId: data.id}
-            registerRequestEndMutation.mutate(dataRequest)
-        });
+    const {registerRequestEndMutation, transitionToGatewayMutation} = registerRequestService();
+    const onClickHandler = () => {
+      console.log({transactionId: data.id, statusPay: data.payed ? 'success' : 'failed'})
+      const dataRequest = {transactionId: data.id, statusPay: data.payed ? 'success' : 'failed'}
+      registerRequestEndMutation.mutate(dataRequest)
     }
+
     const retryGateway = async () => {
       setLoading(true);
       transitionToGatewayMutation.mutateAsync({amount: amount, description: data.description}).then(res => {

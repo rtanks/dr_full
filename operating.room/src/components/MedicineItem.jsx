@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 export default function MedicineItem({onChangeMedicine, medicine, deleteMedicine}) {
     const freqOptions = [
-      {v:'1', t:'1 — یک‌بار در روز'},
-      {v:'2', t:'2 — دو بار در روز'},
-      {v:'3', t:'3 — سه بار در روز'},
-      {v:'4', t:'4 — چهار بار در روز'},
-      {v:'0.5', t:'0.5 — یک روز در میان'}
+      {v: 1, t:'1 — یک‌بار در روز'},
+      {v: 2, t:'2 — دو بار در روز'},
+      {v: 3, t:'3 — سه بار در روز'},
+      {v: 4, t:'4 — چهار بار در روز'},
+      {v: 0.5, t:'0.5 — یک روز در میان'}
     ];
     return (
         <div className="med-row">
@@ -32,7 +32,7 @@ export default function MedicineItem({onChangeMedicine, medicine, deleteMedicine
                 value={medicine.freq} style={{width: '180px'}}>
                 {
                     freqOptions.map(opt => (
-                        <option key={opt.t} value={opt.t}>{opt.t}</option>
+                        <option key={opt.t} value={opt.v}>{opt.t}</option>
                     ))
                 }
             </select>

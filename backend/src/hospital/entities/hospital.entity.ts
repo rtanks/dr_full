@@ -10,7 +10,7 @@ export class Hospital {
     // @Prop({type: Object})
     // usersId?: string;
 
-    @Prop({default: true})
+    @Prop({default: false})
     activate?: boolean;
 }
 export type HospitalDocument = HydratedDocument<Hospital>

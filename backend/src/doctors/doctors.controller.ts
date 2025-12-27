@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
@@ -39,5 +39,9 @@ export class DoctorsController {
   @Get('search/doctor/:fullName')
   async searchDoctorWithName(@Param('fullName') fullName:string) {
     return await this.doctorsService.searchDoctorWithName(fullName);
+  }
+  @Get('/doctor/hospital')
+  async getDoctorWithName(@Query('fullName') fullName:string) {
+    return await this.doctorsService.getDoctorWithFullName(fullName);
   }
 }

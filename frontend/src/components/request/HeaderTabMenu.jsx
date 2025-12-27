@@ -16,7 +16,7 @@ export default function HeaderTabMenu({text, titleRequest, keyRequest}) {
         }
     }
     return (
-        <div className="w-full h-[12%] sm:h-[12%] bg-white rounded-2xl border-2 border-main mb-1 flex flex-row justify-between items-center px-2 sm:px-3">
+        <div className="w-full h-[12%] sm:h-[12%] bg-white rounded-2xl border-2 border-main mb-1 flex flex-row justify-between items-center px-1 sm:px-3">
             <div className="w-max h-max flex flex-row items-center gap-3">
                 <div className='w-12 h-12 rounded-xl bg-white border border-gray-400 flex justify-center items-center text-2xl'>
                     {

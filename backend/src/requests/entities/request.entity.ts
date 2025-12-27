@@ -4,7 +4,7 @@ import { HydratedDocument, Types } from "mongoose";
 @Schema({timestamps: true, })
 export class Request {
     @Prop({type: Types.ObjectId, ref: 'User'})
-    userId: Types.ObjectId;
+    userId: string;
 
     @Prop()
     category: string;
@@ -13,11 +13,12 @@ export class Request {
     @Prop({type: Object})
     request: any;
     
-    @Prop({default: false})
-    statusPay?: boolean;
+    @Prop({default: 'pending'})
+    statusPay?: string;
+    //success | failed | pending
 
-    @Prop({type: Types.ObjectId, ref: "Payment"})
-    transactionId?: Types.ObjectId;
+    @Prop({type: Types.ObjectId, ref: "Payment", default: ""})
+    transactionId?: string;
 }
 export type RequestDocument = HydratedDocument<Request>;
 export const RequestSchema = SchemaFactory.createForClass(Request);

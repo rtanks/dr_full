@@ -22,13 +22,13 @@ const SetCities = ({ setData, data, province, alert, disabled = false }) => {
         onClick={() => province?.name && !disabled && setModal(true)}
         className={`${
           !(!province?.name || !disabled) && `!bg-gray-200`
-        } relative flex h-12 w-full sm:w-1/2 items-center justify-between rounded-[10px] border border-gray-300 bg-gray-100 px-5 !text-green-500 outline-gray-300 dark:bg-white`}
+        } relative flex h-12 w-full sm:w-1/2 items-center justify-between rounded-[10px] border border-gray-300 bg-gray-100 px-5 !text-gray-500 outline-gray-300 dark:bg-white`}
       >
         {city ? (
-          <p className={`line-clamp-1 !text-green-500`}>{city}</p>
+          <p className={`line-clamp-1 !text-gray-500`}>{city}</p>
         ) : (
           <p
-            className={`${province?.name ? `!text-green-500` : `!text-gray-500`} `}
+            className={`${province?.name ? `!text-gray-500` : `!text-gray-500`} `}
           >
             شهر
           </p>

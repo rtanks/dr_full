@@ -16,9 +16,23 @@ import { MessageModule } from './message/message.module';
 import { UserMessagesModule } from './user-messages/user-messages.module';
 import { DoctorsModule } from './doctors/doctors.module';
 import { HospitalModule } from './hospital/hospital.module';
+import {ServeStaticModule} from '@nestjs/serve-static';
+import { join, resolve } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      // rootPath: join(__dirname, '..', 'public'),
+      // rootPath: resolve('E:/rez/TDA.DR/dr-full/files/uploads'),
+      rootPath: resolve("/home/lovelybu/files.tda24.ir/uploads"),
+      // serveRoot: '/uploads',
+      serveRoot: '/',
+      serveStaticOptions: {
+        index: false,
+        //this for server
+        // fallthrough: true,
+      }
+    }),
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(`${process.env.MONGO_URL}`),
     ThrottlerModule.forRoot({

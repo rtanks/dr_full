@@ -12,11 +12,8 @@ export class CreateRequestDto {
     @IsObject()
     request: any;
         
-    @IsBoolean()
+    @IsString()
     @Optional()
-    statusPay: boolean;
-
-    @IsMongoId()
-    @Optional()
-    transactionId: string;
+    statusPay: string;
+    //success | failed | pending
 }

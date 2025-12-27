@@ -31,7 +31,7 @@ const LocationMarker = ({ data, setData, mapRef, show }) => {
       };
     // }
   }, [data]);
-
+  
  if (data?.lat && data?.lng) {
   return (
     <Marker

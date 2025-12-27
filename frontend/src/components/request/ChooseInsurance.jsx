@@ -21,7 +21,7 @@ export default function ChooseInsurance({getInsurance, register}) {
                 {insuranceSelector.map((insurance) => (
                         <div onClick={() => {setActive(insurance.insuranceKey);getInsurance(insurance.insuranceName)}}
                         className={`text-[12.5px] sm:text-sm font-bold hover:cursor-pointer border rounded-lg px-4 py-2 flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis  
-                        ${active === insurance.insuranceKey ? 'bg-select-container text-main border-main' : 'bg-[#f7f7f7]  text-[#888] border-[#aaa]'}`}
+                        ${active === insurance.insuranceKey ? 'bg-select-container text-main border-main' : 'bg-white  text-[#888] border-[#aaa]'}`}
                         key={insurance.insuranceKey}
                     >
                         {insurance.insuranceName}

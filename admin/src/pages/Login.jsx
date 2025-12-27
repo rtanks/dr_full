@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
-  phoneNumber: z.string().nonempty("وارد کردن این فیلد الزامی است").regex(/^09\d{9}$/, "شماره تلفن وارد شده معتبر نیست"),
+  nationalCode: z.string().nonempty("وارد کردن این فیلد الزامی است"),
   password: z.string().nonempty("وارد کردن این فیلد الزامی است")
 })
 
@@ -43,8 +43,8 @@ export default function Login() {
       <div className="w-full mt-12 vazir-medium text-right font-semibold text-lg text-[16px]">ورود ادمین</div>
 
       <form onSubmit={handleSubmit(onSubmit)}  className="w-full h-max">
-        <Input register={register("phoneNumber")} type={"text"} placeholder={"شماره تلفن"} mode={"numeric"}/>
-        {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>}
+        <Input register={register("nationalCode")} type={"text"} placeholder={"شماره تلفن"} mode={"numeric"}/>
+        {errors.nationalCode && <p className="text-red-500 text-sm">{errors.nationalCode.message}</p>}
         <Input register={register("password")} type={"password"} placeholder={"رمز عبور"}/>
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         <SubmitButton title={"ورود"} title2={"در حال ارسال اطلاعات..."} isSubmitting={loginAdminMutation.isPending} 

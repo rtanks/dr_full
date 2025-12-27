@@ -86,7 +86,8 @@ export class PaymentService {
   }
   
   async paymentInquiry(authority:string, merchant_id:string) {
-    return await axios.post('https://payment.zarinpal.com/pg/v4/payment/inquiry.json', 
+    // return await axios.post('https://payment.zarinpal.com/pg/v4/payment/inquiry.json', 
+    return await axios.post('https://sandbox.zarinpal.com/pg/v4/payment/inquiry.json', 
       { merchant_id, authority },{
         headers: {
           'Content-Type': "application/json",

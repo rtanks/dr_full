@@ -4,7 +4,7 @@ import { HydratedDocument } from "mongoose";
 @Schema()
 export class Admin {
     @Prop()
-    phone: string;
+    nationalCode: string;
 
     @Prop()
     password: string;

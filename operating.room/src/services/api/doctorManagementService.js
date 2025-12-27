@@ -16,7 +16,7 @@ export default function doctorManagementService() {
         onSuccess: (res) => {
             console.log(res);
             queryClient.invalidateQueries([{queryKey: ['doctorsHospital']}])
-            location.reload();
+            // location.reload();
         }, 
         onError: (err) => {
             console.log(err);
@@ -37,5 +37,22 @@ export default function doctorManagementService() {
             console.log(err)
         }
     })
-    return {updateActivateMutation, addDoctorMutation}
+    
+    const deleteDoctor = async ({id}) => {
+        const response = await axios.delete(`${baseUrl}/hospital/delete/doctor/${id}/`, {headers});
+        return response;
+    }
+    const deleteDoctorMutation = useMutation({
+        mutationFn: deleteDoctor,
+        onSuccess: (res) => {
+            console.log(res);
+            queryClient.invalidateQueries({queryKey: ['doctorsHospital']})
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+
+
+    return {updateActivateMutation, addDoctorMutation, deleteDoctorMutation}
 }

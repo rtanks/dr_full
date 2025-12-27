@@ -27,7 +27,7 @@ export default function VisitDoctor() {
         <div className="w-full h-full flex flex-col gap-1">
             <HeaderRequestStatus typeRequest={'مشاوره جدید'} titleRequest={getTypeRequest()} 
             statusRequest={'در حال انجام'} keyRequest={getKeyRequest()} date={'1404/12/22'} time={'14:45'}/>
-            <div className='bg-white w-full h-full rounded-2xl px-1 sm:px-4 py-5 overflow-y-scroll'>
+            <div className='bg-white w-full h-full flex flex-col gap-2 rounded-2xl px-1 sm:px-4 py-2 sm:py-5 overflow-y-scroll'>
                 {
                     doctors.map(doctor => (
                         <DoctorItem key={doctor._id} doctor={doctor}/>

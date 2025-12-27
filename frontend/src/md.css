@@ -1,0 +1,272 @@
+:root {
+    --bg: #f8fafc;
+    --primary: #2C8073;
+    --primary-light: #e8f5e9;
+    --success: #10b981;
+    --danger: #ef4444;
+    --text: #0f172a;
+    --text-light: #a7a7a7;
+    --white: #ffffff;
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.app-viewport {
+    direction: rtl;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    background: var(--white);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 10px;
+}
+
+/* --- کارت‌های تنظیم نشده --- */
+.drug-card-unset {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-right: 5px solid var(--danger);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.drug-card-unset:active { transform: scale(0.98); background: #fef2f2; }
+
+.badge-alert {
+    background: #fee2e2;
+    color: var(--danger);
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* --- تایمر --- */
+.timer-box {
+    background: linear-gradient(135deg, #2C8073 0%, #2c8e7f 100%);
+    color: white;
+    box-shadow: 0 5px 10px -5px #2C8073;
+}
+
+
+/* --- آیتم‌های برنامه --- */
+.plan-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: var(--white);
+}
+
+.plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.drug-title { font-weight: bold; display: flex; align-items: center; gap: 5px; }
+
+.dose-badge {
+    background: #f1f5f9;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.dose-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.pill {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.pill.done {
+    background: #cbd5e1;
+    color: #fff;
+    text-decoration: line-through;
+}
+
+/* --- مودال --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 24px;
+    padding: 25px;
+    text-align: center;
+}
+
+.alert-border { border-top: 6px solid var(--danger); }
+
+/* --- استایل ساعت در مودال --- */
+.clock-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.clock-num-mini {
+    padding: 8px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.clock-num-mini.selected {
+    background: var(--primary);
+    color: white;
+}
+
+/* --- دکمه‌ها --- */
+.btn {
+    border: none;
+    padding: 14px auto;
+    border-radius: 12px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-text { background: transparent; color: var(--text-light); }
+.edit-btn {
+    background: none;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+/* ظرف اصلی ساعت */
+.clock-container {
+    width: 240px;
+    height: 240px;
+    margin: 20px auto;
+    position: relative;
+    border-radius: 50%;
+    border: 6px solid #f8fafc;
+    background: white;
+}
+
+/* استایل هر عدد در ساعت */
+.clock-num {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    cursor: pointer;
+    margin: -17px; /* برای تنظیم دقیق مرکز عدد روی محیط دایره */
+    transition: 0.2s;
+    user-select: none;
+}
+
+/* عددی که مستقیماً کلیک شده */
+.clock-num.selected {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.15);
+    z-index: 10;
+    box-shadow: 0 4px 10px #c7c6c6;
+}
+
+/* نوبت‌های بعدی که به صورت اتوماتیک محاسبه شده‌اند */
+.clock-num.auto {
+    background: #53ad9f;
+    color: white;
+}
+
+.modal-desc {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+/* هایلایت ساعات پیشنهادی (سبز کمرنگ) */
+.clock-num.pref {
+    background: #d1fae5;
+    color: var(--success);
+    font-weight: bold;
+}
+
+/* شبکه وعده‌های غذایی */
+.meal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.meal-item label {
+    font-size: 0.7rem;
+    color: var(--text-light);
+    display: block;
+    margin-bottom: 3px;
+}
+
+.meal-item select {
+    width: 100%;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    text-align: center;
+}
+
+/* دکمه پیشنهاد هوشمند */
+.recalc-btn {
+    background: #dfdfdf;
+    border: none;
+    color: var(--primary);
+    font-size: 0.85rem;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.recalc-btn:hover {
+    background: #d6d6d6;
+}

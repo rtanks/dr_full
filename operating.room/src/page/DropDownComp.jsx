@@ -6,12 +6,14 @@ import registerRequestService from "../services/api/registerRequestService";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPatients, getPatientsMain } from "../slices/userSlice";
+import { getUserData } from "../slices/userDragSlice";
 
 export default function DropDownComp({doctors, getDataPatient, getDoctorFilter }) {
-  const { updateRequestMutation, } = registerRequestService();
+  const { updateRequestMutation, sendSmsToUserMutation } = registerRequestService();
   const { baseUrl, headers } = HeaderAuth();
   const dispatch = useDispatch();
   const patients = useSelector(state => state.patients.patients);
+  const userInfo = useSelector(state => state.userDrag);
 
   console.log(doctors)
   // const [columns, setColumns] = useState([...doctors]);
@@ -21,7 +23,7 @@ export default function DropDownComp({doctors, getDataPatient, getDoctorFilter }
   const { data, isPending, isLoading } = useQuery({
     queryKey: ["recoveryRequests"],
     queryFn: async () => {
-      const response = await axios.get(`${baseUrl}/requests/type/recovery`, {
+      const response = await axios.get(`${baseUrl}/requests/hospital/all/`, {
         headers,
       });
       return response.data;
@@ -56,7 +58,9 @@ export default function DropDownComp({doctors, getDataPatient, getDoctorFilter }
   // -------------------------------
   // کارت های بیمار — Drag & Drop
   // -------------------------------
-  const handleCardDragStart = (e, id, doctor) => {
+  const handleCardDragStart = (e, id, doctor, user) => {
+    console.log(user.user)
+    dispatch(getUserData({id: user.user._id, fullName: user.user.fullName, phoneNumber: user.user.phoneNumber}));
     e.dataTransfer.setData("cardId", id);
     e.dataTransfer.setData("fromDoctor", doctor);
     e.currentTarget.classList.add("dragging");
@@ -115,10 +119,18 @@ export default function DropDownComp({doctors, getDataPatient, getDoctorFilter }
     // آپدیت state
     setPatientsByDoctor(newList);
     // آپدیت دکتر در سرور
-    updateRequestMutation.mutate({
-      id: cardId,
-      data: { doctor },
-    });
+      updateRequestMutation.mutateAsync({
+        id: cardId,
+        data: { doctor },
+      }).then(res => {
+        console.log(res?.data?.request?.dateRefer , (res?.data?.request?.medicine.length))
+        if(res?.data?.request?.dateRefer && (res?.data?.request?.medicine.length > 0)) {
+          sendSmsToUserMutation.mutate({phoneNumber: userInfo.phoneNumber, fullName: userInfo.fullName});
+        } else {
+          location.reload();
+        }
+        console.log(res)
+      });
   };
 
   // -------------------------------
@@ -174,7 +186,7 @@ export default function DropDownComp({doctors, getDataPatient, getDoctorFilter }
             <div title={doctor} className="patients" onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleCardDrop(e, doctor)}>
               {patientsByDoctor[doctor]?.map((patient) => (
                 <div key={patient.request._id} data-id={patient.request._id} className="patient-card" draggable="true"
-                  onDragStart={(e) => handleCardDragStart( e, patient.request._id, doctor )} onDragEnd={handleCardDragEnd}>
+                  onDragStart={(e) => handleCardDragStart( e, patient.request._id, doctor, patient )} onDragEnd={handleCardDragEnd}>
                   <Patient getDataPatient={getDataPatient} id={patient.request._id} info={patient} />
                 </div>
               ))}

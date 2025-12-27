@@ -20,8 +20,6 @@ export default function QrCode() {
         console.log(response)
         return URL.createObjectURL(response.data);
     }})
-    console.log(data)
-    // if(isLoading) return <Loading/>
     useEffect(() => {
         const timeOut = setTimeout(() => {
             setCopy({item: '', status: false})
@@ -33,7 +31,7 @@ export default function QrCode() {
             <div className="w-full h-max bg-white p-3.5 rounded-xl">
                 <img src={data} className="w-full h-max"/>
             </div>
-            <div className={`w-full h-max flex flex-col gap-2 px-1 ${info.nationalCode == undefined ? "text-a7a7a7": "text-676767"}`}>
+            <div className={`w-full h-max flex flex-col gap-2 px-1 ${info.nationalCode ? "text-676767": "text-a7a7a7"}`}>
                 <div title={`${frontBaseUrl}/${info.nationalCode}`} className="w-full h-max text-sm font-bold flex flex-row items-center justify-between">
                     <span>اسکن یا کپی لینک معرف</span>
                     {
@@ -42,12 +40,13 @@ export default function QrCode() {
                                 <MdOutlineDone size={19}/>
                             </motion.span>
                         ) : (
-
-                            <LuCopy size={19} onClick={(e) => {
-                                console.log(e.target.parentElement); 
-                                navigator.clipboard.writeText(e.target.parentElement.title);
-                                setCopy({item: "link", status: true})
-                            }}/>
+                            <button type="button" disabled={ !info.nationalCode } onClick={(e) => {
+                                    console.log(e.currentTarget.parentElement); 
+                                    navigator.clipboard.writeText(e.currentTarget.parentElement.title);
+                                    setCopy({item: "link", status: true})
+                                }}>
+                                <LuCopy size={19} />
+                            </button>
                         )
                     }
                 </div>
@@ -61,16 +60,18 @@ export default function QrCode() {
                             </motion.span>
                         ) : (
 
-                            <LuCopy size={19} onClick={(e) => {
-                                console.log(e.target);
-                                navigator.clipboard.writeText(e.target.parentElement.title);
-                                setCopy({item: 'code', status: true})
-                            }}/>
+                            <button type="button" disabled={ !info.nationalCode } onClick={(e) => {
+                                    console.log(e.currentTarget);
+                                    navigator.clipboard.writeText(e.currentTarget.parentElement.title);
+                                    setCopy({item: 'code', status: true})
+                                }}>
+                                <LuCopy size={19}/>
+                            </button>
                         )
                     }
                 </div>
                 <p className="text-sm mt-1 text-justify">بارکد و لینک خود را در اختیار دوستانتان قرار دهید</p>
-                <p className="text-sm text-justify">%10 مبالغ پداختی دوستان به شما برگشت داده میشود و 10% دوستتان کمتر پرداخت میکند </p>
+                <p className="text-sm text-justify">%10 مبالغ پرداختی دوستان از خدمت مشاوره پزشک به شما برگشت داده میشود و 10% دوستتان کمتر پرداخت میکند </p>
             </div>
         </div>
     )

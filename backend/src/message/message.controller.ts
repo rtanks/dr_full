@@ -12,5 +12,8 @@ export class MessageController {
     return {response, users: body.usersId}
   }
   
-  
+  @Post('hospital/patient')
+  async sendSmsForHospitalPatient(@Body() body: {phoneNumber: string, fullName: string}) {
+    return await this.messageService.sendSmsForHospitalPatient(body.phoneNumber, body.fullName);
+  }
 }

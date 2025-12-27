@@ -1,9 +1,10 @@
 import CompleteOrderStepOne from "../components/request/CompleteOrderStepOne";
+import { pricesList } from "../constant/priceList";
 
 export default function Ultrasound() {
     return (
         <div className="w-full h-full flex flex-col gap-1">
-            <CompleteOrderStepOne/>
+            <CompleteOrderStepOne price={pricesList[0].price}/>
         </div>
     )
 }

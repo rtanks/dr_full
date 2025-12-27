@@ -25,7 +25,7 @@ const SetProvinces = ({
         }}
         className={`${
           disabled && `!bg-gray-200`
-        } bg-wite relative flex h-12 w-full sm:w-1/2 items-center justify-between rounded-[10px] border border-gray-300 px-5 !text-green-500 outline-gray-300 bg-gray-100 dark:bg-white 
+        } bg-wite relative flex h-12 w-full sm:w-1/2 items-center justify-between rounded-[10px] border border-gray-300 px-5 !text-gray-500 outline-gray-300 bg-gray-100 dark:bg-white 
         `}
       >
         {province ? (

@@ -152,7 +152,7 @@
 
     .chip {
       flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 18px; 
+      /* padding: 12px 18px;  */
       border-radius: var(--radius-lg);
       border: 1.5px solid var(--chip-border); 
       background: var(--surface); /* زمینه سفید/شفاف */

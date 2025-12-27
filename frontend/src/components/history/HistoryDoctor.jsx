@@ -6,8 +6,8 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function HistoryDoctor({history}) {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const clickHandler = (idHistory) => {
-        navigate(`/request/${idHistory}`)
+    const clickHandler = (idHistory,category) => {
+        navigate(`/request/?id=${idHistory}&category=${category}`)
         queryClient.invalidateQueries({queryKey:['history']})
     }
     return (
@@ -15,7 +15,7 @@ export default function HistoryDoctor({history}) {
             {
                 history.length != 0 ? (
                     history.map(item => (
-                        <HistoryItem key={item._id} id={item._id} onClick={() => clickHandler(item._id)} 
+                        <HistoryItem key={item._id} id={item._id} doctor={item?.request?.doctor} onClick={() => {clickHandler(item._id, item.category);location.reload()}} 
                             date={item.createdAt} service={item.request.service} payed={item.statusPay}/>
                     ))
                 ) : (

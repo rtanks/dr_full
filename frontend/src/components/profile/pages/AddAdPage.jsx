@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../module/button";
 import Input from "../module/input";
-import MAP from "../module/Map/MapMain";
+import MAP from "../module/Map2/MapMain";
 import SetProvinces from "../module/SetProvinces";
 import SetCities from "../module/SetCity";
 import { onChengFormHandel, onChengHandel } from "../../../services/functions";
@@ -11,8 +11,9 @@ import { useMutation } from "@tanstack/react-query";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { useSelector } from 'react-redux';
 import loginService from "../../../services/api/loginService";
-import HeaderTabMenu from "../../request/HeaderTabMenu";
 import { provinces } from "../../../constant/city&province";
+import userService from "../../../services/api/userService";
+import HeaderAuth from "../../../services/api/headerAndUrlService";
 
 const reset = {
   // title: "",
@@ -35,15 +36,15 @@ const reset = {
 };
 const AddAdPage = () => {
   // const [isEdited, setIsEdited] = useState(false);
-  const userInfo = useSelector(state => state.request);
-  const [modal, setModal] = useState(false);
-  const [province, setProvince] = useState({});
   // const [location, setLocation] = useState(null);
+  const [modal, setModal] = useState(false);
+  const { imageUrl } = HeaderAuth();
+  const userInfo = useSelector(state => state.request);
+  const [province, setProvince] = useState({});
   const [location, setLocation] = useState({lat:33.5107527,lng:48.3550717});
   const [address, setAddress] = useState("");
-  console.log(userInfo)
+  console.log(userInfo,`${imageUrl}/${userInfo.profileImage}`)
   const [data, setData] = useState({});
-
   const {
     mutate: mutateFetchAddress,
     isPending: isPendingFetchAddress,
@@ -79,8 +80,10 @@ const AddAdPage = () => {
         location: null,
       }));
     }
+    console.log(location)
     console.log(province)
   }, [location]);
+
   useEffect(() => {
     console.log(userInfo)
     setData({
@@ -120,22 +123,40 @@ const AddAdPage = () => {
   const {editMutation} = loginService();
   const editInformationFunc = () => {
     console.log(data)
+    console.log(location)
     editMutation.mutate({
       address: data.address,
       province: data.province,
       city: data.city,
       birthday: data.constructionDate,
-      location: data.location,
+      location: location,
     })
   }
+  const inpImg = useRef();
+  const {uploadProfileImageMutation} = userService();
+  const changeProfileImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log(formData)
+    uploadProfileImageMutation.mutate(formData)
+  }
   return (
-    <>
+    <div className="w-full h-max flex flex-col gap-2">
       <div className="flex items-center justify-between rounded-xl bg-white">
         <div className="flex items-center gap-2 sm:gap-4 relative bg-white">
           <label htmlFor="image"
             className="cursor-pointer  w-14 sm:w-16 h-14 sm:h-16 p-0.5 bg-gradient-to-tr  from-purple-800 via-red-500 to-yellow-500  rounded-full  "
-          >
-            <HiOutlineUserCircle className=" object-cover border-2 text-gray-400 border-white w-full h-full p-1.5 rounded-full bg-gray-200 " />
+          > 
+            {
+              userInfo.profileImage? (
+                <img src={`${imageUrl}/${userInfo.profileImage}`} alt="profile" className=" object-cover border-2 text-gray-400 border-white w-full h-full rounded-full bg-gray-200 "/>
+              ): (
+                <HiOutlineUserCircle className=" object-cover border-2 text-gray-400 border-white w-full h-full p-1.5 rounded-full bg-gray-200 " />
+              )
+            }
           </label>
           <div>
             <h2 className="sm:mb-1 text-black font-bold text-lg">{data.name}</h2>
@@ -143,29 +164,30 @@ const AddAdPage = () => {
           </div>
         </div>
         <div className="w-fit">
-          <input className="peer  hidden  rounded-[10px] outline-gray-300 h-full w-full border z-50 bg-blue-500 "
+          <input onChange={(e) => changeProfileImage(e)} className="peer  hidden  rounded-[10px] outline-gray-300 h-full w-full border z-50 bg-blue-500 "
             placeholder=" " type="file" id="image"
             name="image" accept="image/*"/>
-          <label htmlFor="image" className=" text-main pt-1  cursor-pointer text-sm">
+          <label htmlFor="image" className="text-main pt-1  cursor-pointer text-sm">
             ویرایش تصویر
           </label>
         </div>
       </div>
 
-      <div className="bg-white grid gap-2 mb-5 !grid-cols-2">
-        <div className="col-span-full flex flex-col sm:flex-row items-center gap-2">
+      <div className="bg-white grid gap-2 mb-0 !grid-cols-2">
+        <div className="col-span-full w-full h-max flex flex-col sm:flex-row items-center gap-2">
           <Input title="شماره تماس"
             FN={(e) => onChengFormHandel(setData, e, true, true)} data={data?.mobile}
             name="mobile" readOnly={true} style="lg:col-span-2"
-            // disabled={isPendingFetchAddress}
             />
-          <Calender placeholder={'تاریخ تولد'} initialDate={String(data.constructionDate)} 
-            getDate={getDate} style="w-full sm:w-1/2"
-            // disabled={isPendingAddAd}
-          />
+          <div className="flex flex-col gap-1 h-max w-full sm:w-1/2">
+            <label className="text-sm">تاریخ تولد</label>
+            <Calender placeholder={'تاریخ تولد'} initialDate={String(data.constructionDate)} 
+              getDate={getDate} style="w-full"
+            />
+          </div>
         </div>
 
-        <div className="w-full flex flex-row items-center gap-2 col-span-2 border h-13">
+        <div className="w-full flex flex-row items-center gap-2 col-span-2 h-13">
           <SetProvinces setData={getData} setProvince={setProvince}
             province={province.name} style={'w-1/2'}
             // disabled={isPendingAddAd}
@@ -176,7 +198,7 @@ const AddAdPage = () => {
           />
         </div>
 
-        <div className="h-[50.5vh] sm:h-[42.5vh] w-full col-span-2 relative">
+        <div className="h-[300px] sm:h-[300px] w-full col-span-2 relative">
           <label htmlFor="address"
             className={`absolute start-1 -top-6 !h-fit rounded-2xl px-2 text-sm text transition-all ease-linear`}
           >
@@ -198,17 +220,17 @@ const AddAdPage = () => {
           <MAP
             data={location}
             setData={setLocation}
-            style=""
+            style="h-[300px] sm:h-[250px]"
             // disabled={isPendingA}ddAd}
           />
         </div>
         <Button type="submit" FA={editInformationFunc}
           disabled={editMutation.isPending} title="ویرایش اطلاعات"
           isLoading={editMutation.isPending}
-          style=" !col-span-full "
+          style=" !col-span-full mt-14 sm:mt-0"
         />
       </div>
-    </>
+    </div>
   );
 };
 

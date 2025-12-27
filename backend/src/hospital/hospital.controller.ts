@@ -19,4 +19,8 @@ export class HospitalController {
   async updateActivate(@Body('doctorId') doctorId:string, @Body('activate') activate:boolean) {
     return await this.hospitalService.updateActivate(doctorId, activate);
   }
+  @Delete('delete/doctor/:id')
+  async deleteDoctor(@Param('id') id:string) {
+    return await this.hospitalService.deleteDoctor(id);
+  }
 }

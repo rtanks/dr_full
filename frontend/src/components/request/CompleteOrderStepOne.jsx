@@ -11,12 +11,12 @@ import z from 'zod'
 import Notification from '../general/Notification'
 import CheckAuth from '../../services/hook/CheckAuth'
 import { getShowModal } from '../../slices/modalSlice'
-import {getKeyRequest, getTypeRequest, getTypeRequestService} from '../../services/func/getTypeRequest'
+import {getCategory, getKeyRequest, getTypeRequest, getTypeRequestService} from '../../services/func/getTypeRequest'
 import registerRequestService from '../../services/api/registerRequestService'
-import { useNavigate } from 'react-router-dom'
 import HeaderRequestStatus from './HeaderRequestStatus'
 import LoadingGateway from '../payment/LoadingGateway'
-import VoiceRecorder from './VoiceRecorder'
+import HeaderAuth from '../../services/api/headerAndUrlService'
+import { transformFormatWithSpread } from '../../services/func/transformFunc'
 
 const schema = z.object({
     service: z.string(),
@@ -24,9 +24,9 @@ const schema = z.object({
     insurance: z.string().nonempty('این فیلد الزامی است'),
     explain: z.string().nonempty('این فیلد الزامی است'),
 })
-export default function CompleteOrderStepOne() {
-    const navigate = useNavigate();
+export default function CompleteOrderStepOne({price, text}) {
     const container = useRef();
+    const {id} = HeaderAuth();
     // const requestDefaultValue = useSelector(state => state.request);
     const {register, handleSubmit, setFocus, watch, setValue, getFieldState, control, formState: {errors, defaultValues,isValid, touchedFields, isSubmitting}} = useForm({
         resolver: zodResolver(schema),
@@ -64,34 +64,34 @@ export default function CompleteOrderStepOne() {
     const {initialRegisterRequestMutation, transitionToGatewayMutation} = registerRequestService()
     const onSubmit = (data) => {
         console.log(data)
-        initialRegisterRequestMutation.mutate({...data, price: 263000, service: getTypeRequestService()})
+        console.log({userId: id, statusPay: 'pending',category: getCategory(getTypeRequestService()), request:{...data, price: 263000, service: getTypeRequestService()}})
+        initialRegisterRequestMutation.mutate({userId: id, statusPay: 'pending', category: getCategory(getTypeRequestService()), request:{...data, price: 263000, service: getTypeRequestService()}})
         if(checkAuthUser()) {
             setLoading(true);
-            transitionToGatewayMutation.mutateAsync({amount: 260000, description: getTypeRequest()}).then(res => {
+            transitionToGatewayMutation.mutateAsync({amount: price, description: getTypeRequest()}).then(res => {
                 setLoading(false);
                 localStorage.removeItem('timeStart')
             }).catch(err => err);
         } else {
             dispatch(getShowModal({item: 'payment'}));
         }
-        console.log({...data, service: getTypeRequestService()})
     }
     return (
         <div ref={container} className="w-full h-full flex flex-col gap-1 overflow-y-scroll">
             <HeaderRequestStatus typeRequest={'مشاوره جدید'} titleRequest={getTypeRequest()} 
-            statusRequest={'در حال انجام'} keyRequest={getKeyRequest()} date={'1404/12/22'} time={'14:45'}/>
+            statusRequest={'درحال انجام'} keyRequest={getKeyRequest()} date={'1404/12/22'} time={'14:45'}/>
 
             <form onSubmit={handleSubmit(onSubmit)} className='w-full h-[87%] flex flex-col gap-5'>
                 <div className='bg-white w-full h-max rounded-2xl px-1.5 sm:px-4 pb-2'>
                     <SelectPartBody containerRef={container.current} getAreas={getAreas} register={register('area')}/>
-
-                    <Symptoms register={register('explain')} isValid={watch('explain') ? getFieldStateValue('explain') : false} isError={errors?.explain} messageError={errors?.explain?.message}/>
-                    <VoiceRecorder/>
+                    
+                    <Symptoms register={register('explain')} isValid={watch('explain') ? getFieldStateValue('explain') : false} 
+                        isError={errors?.explain} messageError={errors?.explain?.message}/>
                     
                     <ChooseInsurance  getInsurance={getInsurance}/>
                     {errors.insurance && <TextError message={errors.insurance.message}/>}
 
-                    <RequestButton type={'submit'}  text="انتقال به درگاه برای پرداخت هزینه مشاوره پزشک متخصص با 10 % تخفیف 26.000 تومان " 
+                    <RequestButton type={'submit'}  text={`انتقال به درگاه برای پرداخت هزینه ${text} با 10 % تخفیف ${transformFormatWithSpread(String(price).slice(0,-1))} تومان ` }
                      textSubmitting={'در حال ثبت اطلاعات...'} valid={isValid}/>
                 </div>
             </form>

@@ -62,7 +62,7 @@ export class DoctorsService {
   }
 
   async searchDoctorWithName(fullName: string) {
-    const user = await this.doctorModel.find({fullName: {$regex: fullName, $options: 'i'}});
+    const user = await this.doctorModel.find({fullName: {$regex: fullName, $options: 'i'}}).limit(8);
     if(!user) {
       throw new BadRequestException('کاربر یافت نشد!');
     }
@@ -74,5 +74,13 @@ export class DoctorsService {
     if(!id) throw new BadRequestException('کاربر یافت نشد!');
 
     return dr
+  }
+
+  async getDoctorWithFullName(fullName:string) {
+    const response = await this.doctorModel.findOne({fullName});
+    if(!response) {
+      throw new BadRequestException('دکتر مورد نظر یافت نشد!')
+    }
+    return response;
   }
 }

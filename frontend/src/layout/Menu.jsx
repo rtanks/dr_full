@@ -32,7 +32,7 @@ export default function Menu({scrollHandler, changeActiveSnap}) {
                 <div className='w-full h-max flex flex-col'>
                     {/* search box */}
                     <SearchBox placeholder={'جستجو در تی دا : سامانه آموزش و درمان کشور'} mStyle={'mb-2'}/>
-                    <MenuItem path={'#'} title={'تریاژ (تشخیص و مشاوره)'}>
+                    <MenuItem path={'/triage'} title={'تریاژ (تشخیص و مشاوره)'}>
                         <MriIcon/>
                     </MenuItem>
                     <MenuItem path={'/visit-doctor'} onClick={goToCenterItem} title={'ویزیت پزشک'}>
